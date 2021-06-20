@@ -1,3 +1,5 @@
+//this file has the models for the app
+
 class Sub {
   String name;
   Sub({this.name});

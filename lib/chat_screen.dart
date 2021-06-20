@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/components/bottom_drawer.dart';
 import 'globals.dart';
+//this file has the chat screen
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -13,15 +14,14 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final grey = const Color(0xFFe0e3e3).withOpacity(0.5);
-    //bool showMenu = false;
+
     return Scaffold(
       //resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(70.0),
+        preferredSize: Size.fromHeight(height * 0.082), //70
         child: AppBar(
-          leadingWidth: 70,
+          leadingWidth: height * 0.082, //70
           backgroundColor: Colors.white,
           elevation: 0,
           leading: InkWell(
@@ -31,18 +31,21 @@ class _ChatScreenState extends State<ChatScreen> {
                 Navigator.pop(context);
               },
               child: Container(
-                  height: 30,
+                  height: height * 0.035, //30
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(20)),
                   child: Center(child: SvgPicture.asset('assets/back.svg')))),
           title: Text(
             "Teacher",
             style: TextStyle(
-                fontFamily: "MontserratB", fontSize: 24, color: Colors.black),
+                fontFamily: "MontserratB",
+                fontSize: width * 0.0611, //24
+                color: Colors.black),
           ),
           actions: [
             Padding(
-              padding: const EdgeInsets.only(left: 18.0, right: 28),
+              padding: EdgeInsets.only(
+                  left: width * 0.045, right: width * 0.071), //18 28
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -54,16 +57,15 @@ class _ChatScreenState extends State<ChatScreen> {
                     },
                     child: Text("AskDoubt",
                         style: TextStyle(
-                            //decoration: TextDecoration.underline,
                             fontFamily: "Montserrat",
-                            fontSize: 16,
+                            fontSize: width * 0.04, //16
                             color: Colors.black)),
                   ),
                   SizedBox(
-                    width: 30,
+                    width: width * 0.076, //30
                   ),
                   Container(
-                      height: 60,
+                      height: width * 0.152, //60
                       child: Center(child: SvgPicture.asset('assets/meet.svg')))
                 ],
               ),
@@ -93,14 +95,16 @@ class _ChatScreenState extends State<ChatScreen> {
                 ],
               ),
             ),
-            //Positioned(width: width, bottom: 8, child: TextInput()),
+            Positioned(
+                bottom: 18, //18
+                child: Container(width: width, child: TextInput())),
+            //this widget is bottom drawer
             BottomDrawer(
               showMenu: Drawerclass.showMenu,
             )
           ],
         ),
       ),
-      bottomNavigationBar: TextInput(),
     );
   }
 }
@@ -123,29 +127,32 @@ class _MessageState extends State<Message> {
     double width = MediaQuery.of(context).size.width;
     final grey = const Color(0xFFe0e3e3).withOpacity(0.5);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
+      padding: EdgeInsets.symmetric(
+          horizontal: width * 0.061, vertical: height * 0.009), //24 8
       child: Container(
         alignment:
             widget.from == 'receiver' ? Alignment.topLeft : Alignment.topRight,
         child: Container(
-          constraints: BoxConstraints(maxWidth: 280, minWidth: 100),
+          constraints: BoxConstraints(
+              maxWidth: width * 0.71, minWidth: width * 0.25), //280 100
           decoration: BoxDecoration(
               color: grey, borderRadius: BorderRadius.circular(10)),
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.symmetric(
+                horizontal: width * 0.04, vertical: height * 0.018), //16 16
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(widget.message,
                     style: TextStyle(
                         fontFamily: "Montserrat",
-                        fontSize: 18,
+                        fontSize: width * 0.045, //18
                         color: Colors.black)),
-                SizedBox(height: 8),
+                SizedBox(height: height * 0.009), //8
                 Text(widget.time,
                     style: TextStyle(
                         fontFamily: "MontserratM",
-                        fontSize: 10,
+                        fontSize: width * 0.025, //10
                         color: Colors.black.withOpacity(0.3)))
               ],
             ),
@@ -166,19 +173,19 @@ class _DoubtMessageState extends State<DoubtMessage> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final grey = const Color(0xFFe0e3e3).withOpacity(0.5);
     return Container(
       width: width,
       child: Padding(
-        padding: const EdgeInsets.all(18.0),
+        padding: EdgeInsets.symmetric(
+            horizontal: width * 0.045, vertical: height * 0.021), //18 18
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Container(
-                  height: 20,
-                  width: 20,
+                  height: height * 0.023, //20
+                  width: width * 0.05, //20
                   child: Center(
                     child: SvgPicture.asset(
                       'assets/round.svg',
@@ -189,18 +196,21 @@ class _DoubtMessageState extends State<DoubtMessage> {
                 Text('What are classes in CPP ?',
                     style: TextStyle(
                       fontFamily: "MontserratSB",
-                      fontSize: 24,
+                      fontSize: width * 0.061, //24
                       color: Colors.black,
                     ))
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
+              padding: EdgeInsets.only(
+                  left: width * 0.05,
+                  top: height * 0.011,
+                  bottom: height * 0.011), //20 10 10
               child: Text(
                 'Good evening ma’am , I was trying to make a class in cpp but the compiler is showing error everytime. ',
                 style: TextStyle(
                     fontFamily: "Montserrat",
-                    fontSize: 18,
+                    fontSize: width * 0.045, //18
                     color: Colors.black.withOpacity(0.6)),
               ),
             ),
@@ -223,24 +233,26 @@ class _TextInputState extends State<TextInput> {
     double width = MediaQuery.of(context).size.width;
     final grey = const Color(0xFFe0e3e3).withOpacity(0.5);
     return Padding(
-      padding: const EdgeInsets.all(18.0),
+      padding: EdgeInsets.symmetric(
+          horizontal: width * 0.045, vertical: height * 0.021), //18 18
       child: Container(
-        height: 50,
+        height: height * 0.058, //50
         width: width,
         decoration:
             BoxDecoration(color: grey, borderRadius: BorderRadius.circular(10)),
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: EdgeInsets.symmetric(
+              horizontal: width * 0.03, vertical: height * 0.014), //12 12
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.baseline,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                height: 24,
+                height: height * 0.028, //24
                 child: SvgPicture.asset('assets/paperclip.svg'),
               ),
               SizedBox(
-                width: 10,
+                width: width * 0.025, //10
               ),
               Flexible(
                 /*height: 50,
@@ -248,7 +260,7 @@ class _TextInputState extends State<TextInput> {
                 child: TextFormField(
                   style: TextStyle(
                       fontFamily: "Montserrat",
-                      fontSize: 18,
+                      fontSize: width * 0.045, //18
                       color: Colors.black),
                   decoration: InputDecoration(
                       border: InputBorder.none,
@@ -258,19 +270,19 @@ class _TextInputState extends State<TextInput> {
                       disabledBorder: InputBorder.none,
                       hintStyle: TextStyle(
                           fontFamily: "Montserrat",
-                          fontSize: 18,
+                          fontSize: width * 0.045, //18
                           color: Colors.black.withOpacity(0.3)),
                       hintText: "Type Something ....."),
                 ),
               ),
               Container(
-                height: 50,
-                width: 40,
+                height: height * 0.058, //50
+                width: width * 0.101, //40
                 child: Text(
                   'Send',
                   style: TextStyle(
                       fontFamily: "MontserratM",
-                      fontSize: 14,
+                      fontSize: width * 0.035, //14
                       color: Colors.black),
                 ),
               )

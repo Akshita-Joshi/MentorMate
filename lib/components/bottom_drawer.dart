@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mentor_mate/chat_screen.dart';
 import 'package:mentor_mate/globals.dart';
 
 class BottomDrawer extends StatefulWidget {
@@ -23,7 +22,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
           text,
           style: TextStyle(
               fontFamily: "MontserratM",
-              fontSize: 14,
+              fontSize: width * 0.035, //14
               color: Colors.black.withOpacity(0.3)),
         ),
       ),
@@ -33,14 +32,14 @@ class _BottomDrawerState extends State<BottomDrawer> {
   static TextStyle _hintText() {
     return TextStyle(
         fontFamily: "MontserratM",
-        fontSize: 24,
+        fontSize: width * 0.061, //24
         color: Colors.black.withOpacity(0.3));
   }
 
   static TextStyle _inputText1() {
     return TextStyle(
       fontFamily: "MontserratSB",
-      fontSize: 24,
+      fontSize: width * 0.061, //24
       color: Colors.black,
     );
   }
@@ -48,7 +47,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
   static TextStyle _inputText2() {
     return TextStyle(
         fontFamily: "Montserrat",
-        fontSize: 18,
+        fontSize: width * 0.045, //18
         color: Colors.black.withOpacity(0.6));
   }
 
@@ -68,12 +67,12 @@ class _BottomDrawerState extends State<BottomDrawer> {
       duration: Duration(milliseconds: 200),
       left: 0,
       bottom: (widget.showMenu)
-          ? -140 //-(height * 0.094) //-(height * 0.164)//80
-          : -(height * 0.822), //140 and 700
+          ? -(height * 0.164) //-140
+          : -(height * 0.822), // -700
       child: Column(
         children: [
           SizedBox(
-            height: 10,
+            height: height * 0.011, //10
           ),
           Container(
               height: height * 0.687, //500
@@ -96,7 +95,9 @@ class _BottomDrawerState extends State<BottomDrawer> {
                 ],
               ),
               child: Padding(
-                  padding: EdgeInsets.all(28), //40/*height * 0.047*/
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.071,
+                      vertical: height * 0.032), //28 28
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -114,8 +115,8 @@ class _BottomDrawerState extends State<BottomDrawer> {
                                 });
                               },
                               child: Container(
-                                height: 30,
-                                width: 30,
+                                height: height * 0.035, //30
+                                width: width * 0.076, //30
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(6),
                                     color: Colors.black.withOpacity(0.05)),
@@ -160,7 +161,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
                                   _callOnTop();
                                 },
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(height: height * 0.011), //10
                               _label(doubtdesOpacity, "Doubt description"),
                               TextFormField(
                                 keyboardType: TextInputType.multiline,
@@ -186,7 +187,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
                                   _callOnTop();
                                 },
                               ),
-                              SizedBox(height: 30),
+                              SizedBox(height: height * 0.035), //30
                               Container(
                                   width: width,
                                   decoration: BoxDecoration(
@@ -194,21 +195,23 @@ class _BottomDrawerState extends State<BottomDrawer> {
                                       borderRadius: BorderRadius.circular(6)),
                                   child: Center(
                                       child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: width * 0.03,
+                                        vertical: height * 0.014), //12 12
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
                                         Container(
-                                          height: 16,
+                                          height: height * 0.018, //16
                                           child: SvgPicture.asset(
                                               'assets/paperclip.svg'),
                                         ),
-                                        SizedBox(width: 8),
+                                        SizedBox(width: width * 0.020), //8
                                         Text("Attach image",
                                             style: TextStyle(
                                                 fontFamily: "Montserrat",
-                                                fontSize: 12,
+                                                fontSize: width * 0.03, //12
                                                 color: Colors.black))
                                       ],
                                     ),

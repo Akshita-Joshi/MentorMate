@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mentor_mate/globals.dart';
 
 class Loader extends StatelessWidget {
   String message;
@@ -18,14 +19,14 @@ class Loader extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: "MontserratSB",
-                  fontSize: 24,
+                  fontSize: width * 0.061, //24
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: height * 0.023, //20
               ),
               Container(
-                width: 40,
+                width: width * 0.101, //40
                 child: LinearProgressIndicator(
                   backgroundColor: Colors.white,
                   minHeight: 2,

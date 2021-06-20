@@ -15,12 +15,13 @@ class _DoubtsState extends State<Doubts> {
     return Container(
       width: width,
       child: Padding(
-        padding: const EdgeInsets.all(18.0),
+        padding: EdgeInsets.symmetric(
+            horizontal: width * 0.045, vertical: height * 0.021), //18 18
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 20.0),
+              padding: EdgeInsets.only(left: width * 0.05), //20
               child: Container(
                 width: width,
                 child: Row(
@@ -30,11 +31,11 @@ class _DoubtsState extends State<Doubts> {
                       'Durgesh Kudalkar',
                       style: TextStyle(
                           fontFamily: "MontserratM",
-                          fontSize: 14,
+                          fontSize: width * 0.035, //14
                           color: Colors.black.withOpacity(0.5)),
                     ),
                     SizedBox(
-                      width: 10,
+                      width: width * 0.025, //10
                     ),
                     Expanded(
                       child: Container(
@@ -48,20 +49,23 @@ class _DoubtsState extends State<Doubts> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, top: 2, bottom: 10),
+              padding: EdgeInsets.only(
+                  left: width * 0.05,
+                  top: 2,
+                  bottom: height * 0.011), // 20 2 10
               child: Text(
                 'CSE A 53',
                 style: TextStyle(
                     fontFamily: "MontserratM",
-                    fontSize: 16,
+                    fontSize: width * 0.04, //16
                     color: Colors.black.withOpacity(0.3)),
               ),
             ),
             Row(
               children: [
                 Container(
-                  height: 20,
-                  width: 20,
+                  height: height * 0.023, //20
+                  width: width * 0.05, //20
                   child: Center(
                     child: SvgPicture.asset(
                       'assets/round.svg',
@@ -72,34 +76,39 @@ class _DoubtsState extends State<Doubts> {
                 Text('What are classes in CPP ?',
                     style: TextStyle(
                       fontFamily: "MontserratSB",
-                      fontSize: 24,
+                      fontSize: width * 0.061, //24
                       color: Colors.black,
                     ))
               ],
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, top: 10, bottom: 10),
+              padding: EdgeInsets.only(
+                  left: width * 0.05,
+                  top: height * 0.011,
+                  bottom: height * 0.011), //20 10 10
               child: Text(
                 'Good evening ma’am , I was trying to make a class in cpp but the compiler is showing error everytime. ',
                 style: TextStyle(
                     fontFamily: "Montserrat",
-                    fontSize: 18,
+                    fontSize: width * 0.045, //18
                     color: Colors.black.withOpacity(0.6)),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20, top: 8.0),
+              padding: EdgeInsets.only(
+                  left: width * 0.05, top: height * 0.009), //20 8
               child: Text("9:30 AM",
                   style: TextStyle(
                       fontFamily: "MontserratM",
-                      fontSize: 14,
+                      fontSize: width * 0.035, //14
                       color: Colors.black.withOpacity(0.3))),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 20.0, top: 10),
+              padding: EdgeInsets.only(
+                  left: width * 0.05, top: height * 0.011), //20 10
               child: Container(
-                height: 40,
-                width: 100,
+                height: height * 0.047, //40
+                width: width * 0.254, //100
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   color: grey,
@@ -109,7 +118,7 @@ class _DoubtsState extends State<Doubts> {
                   child: Text('Reply',
                       style: TextStyle(
                         fontFamily: "MontserratM",
-                        fontSize: 15,
+                        fontSize: width * 0.037, //15
                         color: Colors.black,
                       )),
                 ),

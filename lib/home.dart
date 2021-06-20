@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mentor_mate/chat_screen.dart';
 import 'package:mentor_mate/components/request.dart';
 import 'package:mentor_mate/doubts_list.dart';
+import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/models/models.dart';
 
 class StudentHome extends StatefulWidget {
@@ -11,9 +12,12 @@ class StudentHome extends StatefulWidget {
 }
 
 class _StudentHomeState extends State<StudentHome> {
+  //this widget is the text style for subjects
   static TextStyle _textStyle() {
     return TextStyle(
-        fontFamily: "MontserratSB", fontSize: 24, color: Colors.black);
+        fontFamily: "MontserratSB",
+        fontSize: width * 0.061, //24
+        color: Colors.black);
   }
 
   List<Widget> _subTiles = [];
@@ -47,6 +51,7 @@ class _StudentHomeState extends State<StudentHome> {
     });
   }
 
+//this widget is the subject card
   Widget _buildTile(Sub sub) {
     return InkWell(
       radius: 320,
@@ -55,12 +60,14 @@ class _StudentHomeState extends State<StudentHome> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ChatScreen(),
+              builder: (context) =>
+                  ChatScreen(), //directs to chat screen on tap
             ));
       },
       child: Container(
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 12.0, top: 12),
+          padding: EdgeInsets.only(
+              bottom: height * 0.014, top: height * 0.014), //12 12
           child: Text(
             sub.name,
             style: _textStyle(),
@@ -70,6 +77,7 @@ class _StudentHomeState extends State<StudentHome> {
     );
   }
 
+//these two variables are related to animations
   Tween<Offset> _offset = Tween(begin: Offset(-1, 0), end: Offset(0, 0));
   GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
@@ -77,7 +85,7 @@ class _StudentHomeState extends State<StudentHome> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final grey = const Color(0xFFe0e3e3).withOpacity(0.5);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -86,9 +94,10 @@ class _StudentHomeState extends State<StudentHome> {
       ),
       body: Stack(children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: Padding(
-            padding: const EdgeInsets.only(left: 18.0, right: 18.0),
+            padding: EdgeInsets.only(
+                left: width * 0.045, right: width * 0.045), //18 18
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -96,7 +105,7 @@ class _StudentHomeState extends State<StudentHome> {
                   "Welcome,",
                   style: TextStyle(
                     fontFamily: "MontserratB",
-                    fontSize: 44,
+                    fontSize: width * 0.112, //44
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
@@ -105,13 +114,13 @@ class _StudentHomeState extends State<StudentHome> {
                   "Durgesh Kudalkar",
                   style: TextStyle(
                     fontFamily: "MontserratT",
-                    fontSize: 30,
+                    fontSize: width * 0.076, //30
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
                 SizedBox(
-                  height: 120,
+                  height: height * 0.141, //120
                 ),
                 Expanded(
                   child: AnimatedList(
@@ -128,10 +137,10 @@ class _StudentHomeState extends State<StudentHome> {
           ),
         ),
         Positioned(
-          bottom: 20,
+          bottom: height * 0.023, //20
           child: Container(
             width: width,
-            height: 50,
+            height: height * 0.058, //50
             child: Center(
               child: SvgPicture.asset(
                 'assets/logo.svg',
@@ -153,7 +162,6 @@ class TeacherHome extends StatefulWidget {
 class _TeacherHomeState extends State<TeacherHome>
     with SingleTickerProviderStateMixin {
   TabController _controller;
-  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -173,15 +181,16 @@ class _TeacherHomeState extends State<TeacherHome>
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(70.0),
+          preferredSize: Size.fromHeight(height * 0.082), //70
           child: AppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
             elevation: 0,
             flexibleSpace: SafeArea(
               child: Column(
                 children: [
                   SizedBox(
-                    height: 16,
+                    height: height * 0.018, //16
                   ),
                   TabBar(
                     indicatorColor: Colors.white,
@@ -189,11 +198,11 @@ class _TeacherHomeState extends State<TeacherHome>
                     unselectedLabelColor: Colors.black.withOpacity(0.3),
                     labelStyle: TextStyle(
                         fontFamily: "MontserratM",
-                        fontSize: 16,
+                        fontSize: width * 0.040, //16
                         color: Colors.black),
                     unselectedLabelStyle: TextStyle(
                         fontFamily: "MontserratM",
-                        fontSize: 16,
+                        fontSize: width * 0.040, //16
                         color: Colors.black.withOpacity(0.4)),
                     controller: _controller,
                     isScrollable: false,
@@ -227,7 +236,9 @@ class _TeacherHomeState extends State<TeacherHome>
               DoubtPage(),
             ],
           ),
-          Positioned(top: 70, child: RequestList())
+          Positioned(
+              top: height * 0.082, //70
+              child: RequestList())
         ]),
       ),
     );

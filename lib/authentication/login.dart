@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/home.dart';
 
 class Login extends StatefulWidget {
@@ -15,13 +16,15 @@ class _LoginState extends State<Login> {
   static TextStyle _hintText() {
     return TextStyle(
         fontFamily: "MontserratM",
-        fontSize: 24,
+        fontSize: width * 0.061, //24
         color: Colors.black.withOpacity(0.3));
   }
 
   static TextStyle _inputText() {
     return TextStyle(
-        fontFamily: "MontserratM", fontSize: 24, color: Colors.black);
+        fontFamily: "MontserratM",
+        fontSize: width * 0.061, //24
+        color: Colors.black);
   }
 
   static AnimatedOpacity _label(double value, String text) {
@@ -34,7 +37,7 @@ class _LoginState extends State<Login> {
           text,
           style: TextStyle(
               fontFamily: "MontserratM",
-              fontSize: 14,
+              fontSize: width * 0.035, //14
               color: Colors.black.withOpacity(0.3)),
         ),
       ),
@@ -51,7 +54,6 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final grey = const Color(0xFFe0e3e3).withOpacity(0.5);
 
     return Scaffold(
       //resizeToAvoidBottomInset: false,
@@ -66,7 +68,7 @@ class _LoginState extends State<Login> {
             children: [
               Container(
                 alignment: Alignment.centerLeft,
-                height: 260,
+                height: height * 0.305, //260
                 width: width,
                 decoration: BoxDecoration(
                     image: DecorationImage(
@@ -75,11 +77,11 @@ class _LoginState extends State<Login> {
                         fit: BoxFit.fitWidth,
                         image: AssetImage('assets/3.jpg'))),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.071), //28
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 56),
+                      SizedBox(height: height * 0.065), //56
                       InkWell(
                         customBorder: new CircleBorder(),
                         splashColor: Colors.black.withOpacity(0.2),
@@ -87,19 +89,19 @@ class _LoginState extends State<Login> {
                           Navigator.pop(context);
                         },
                         child: Container(
-                            height: 30,
-                            width: 30,
+                            height: height * 0.035, //30
+                            width: width * 0.076, //30
                             child: Center(
                                 child: SvgPicture.asset('assets/back.svg'))),
                       ),
                       SizedBox(
-                        height: 50,
+                        height: height * 0.058, //50
                       ),
                       Text(
                         "Login ",
                         style: TextStyle(
                           fontFamily: "MontserratB",
-                          fontSize: 44,
+                          fontSize: width * 0.112, //44
                           color: Colors.black,
                         ),
                       ),
@@ -107,10 +109,10 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-              SizedBox(height: 50),
+              SizedBox(height: height * 0.058), //50
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                  padding: EdgeInsets.symmetric(horizontal: width * 0.071), //28
                   child: ListView(
                     controller: _scrollController,
                     physics: BouncingScrollPhysics(),
@@ -139,7 +141,7 @@ class _LoginState extends State<Login> {
                           _callOnTop();
                         },
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: height * 0.011), //10
                       //--------------------------------
                       _label(passOpacity, "Password"),
                       TextFormField(
@@ -162,10 +164,10 @@ class _LoginState extends State<Login> {
                           _callOnTop();
                         },
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: height * 0.011), //10
 
                       SizedBox(
-                        height: height / 2 - 300,
+                        height: height / 2 - (height * 0.35), //300
                       )
                     ],
                   ),
@@ -175,8 +177,8 @@ class _LoginState extends State<Login> {
           ),
         ),
         Positioned(
-          right: 100,
-          bottom: 60,
+          right: width * 0.254, //100
+          bottom: height * 0.07, //60
           child: [
             emailOpacity,
             passOpacity,
@@ -196,7 +198,7 @@ class _LoginState extends State<Login> {
                         'Next →',
                         textStyle: TextStyle(
                           fontFamily: "MontserratSB",
-                          fontSize: 24,
+                          fontSize: width * 0.061, //24
                           color: Colors.black,
                         ),
                       )

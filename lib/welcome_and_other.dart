@@ -2,11 +2,11 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/authentication/login.dart';
-import 'package:mentor_mate/authentication/register.dart';
 import 'package:mentor_mate/authentication/signup.dart';
 import 'package:mentor_mate/authentication/teacherlogin.dart';
 import 'package:mentor_mate/globals.dart';
 
+//this file has the welcome screen and the student or teacher screen
 class Welcome extends StatefulWidget {
   @override
   _WelcomeState createState() => _WelcomeState();
@@ -17,36 +17,38 @@ class _WelcomeState extends State<Welcome> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    final grey = const Color(0xFFe0e3e3).withOpacity(0.5);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
           child: Stack(
         children: [
+          //these top 3 positiones are the illustrations and middle one is logo
           Positioned(
-              top: 40,
-              left: -10,
+              top: height * 0.047, //40
+              left: -(height * 0.011), //-10
               child: SvgPicture.asset('assets/illustration1.svg')),
           Positioned(
-              top: 240,
+              top: height * 0.282, //240
               child: Container(
                   width: width,
                   child: Center(child: SvgPicture.asset('assets/logo.svg')))),
           Positioned(
-              top: 340,
-              right: -10,
+              top: height * 0.399, //340
+              right: -(height * 0.011), //-10
               child: SvgPicture.asset('assets/illustration2.svg')),
+          //this positioned is the buttons for get started and login
           Positioned(
-            bottom: 60,
+            bottom: height * 0.07, //60
             child: Padding(
-              padding: const EdgeInsets.all(28.0),
+              padding: EdgeInsets.all(height * 0.032), //28
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   InkWell(
                     onTap: () {
                       setState(() {
-                        Authcheck.process = "signup";
+                        Authcheck.process =
+                            "signup"; //sets the global variable to sign up and then UI directs to signup process
                       });
                       Navigator.push(
                           context,
@@ -55,8 +57,9 @@ class _WelcomeState extends State<Welcome> {
                           ));
                     },
                     child: Container(
-                      height: 50,
-                      width: width - 56,
+                      //this is the get started button
+                      height: height * 0.058, //50
+                      width: width - (width * 0.142), //56
                       decoration: BoxDecoration(
                           color: Colors.black,
                           borderRadius: BorderRadius.circular(10)),
@@ -65,7 +68,7 @@ class _WelcomeState extends State<Welcome> {
                           "Get Started",
                           style: TextStyle(
                             fontFamily: "MontserratSB",
-                            fontSize: 20,
+                            fontSize: width * 0.05, //20
                             color: Colors.white,
                           ),
                         ),
@@ -73,15 +76,16 @@ class _WelcomeState extends State<Welcome> {
                     ),
                   ),
                   SizedBox(
-                    height: 30,
+                    height: height * 0.035, //30
                   ),
+                  //this is the login line and button
                   Row(
                     children: [
                       Text(
                         'Already a member?  ',
                         style: TextStyle(
                           fontFamily: "Montserrat",
-                          fontSize: 18,
+                          fontSize: width * 0.045, //18
                           color: Colors.black,
                         ),
                       ),
@@ -101,7 +105,7 @@ class _WelcomeState extends State<Welcome> {
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                             fontFamily: "MontserratB",
-                            fontSize: 20,
+                            fontSize: width * 0.05, //20
                             color: Colors.black,
                           ),
                         ),

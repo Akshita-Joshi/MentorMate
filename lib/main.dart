@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mentor_mate/authentication/register.dart';
-import 'package:mentor_mate/home.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/splashscreen.dart';
-import 'package:mentor_mate/welcome_and_other.dart';
 //import 'package:splashscreen/splashscreen.dart';
 
 void main() {
@@ -12,6 +9,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -1,10 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mentor_mate/authentication/login.dart';
-import 'package:mentor_mate/authentication/signup.dart';
-import 'package:mentor_mate/chat_screen.dart';
-import 'package:mentor_mate/components/loader.dart';
+import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/home.dart';
 import 'package:mentor_mate/welcome_and_other.dart';
 
@@ -35,11 +32,14 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void navigationPage() {
     Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (BuildContext context) => TeacherHome()));
+        MaterialPageRoute(builder: (BuildContext context) => Welcome()));
   }
 
   @override
   Widget build(BuildContext context) {
+    media(context);
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
       body: InkWell(
@@ -56,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Container(
-                          height: 60,
+                          height: height * 0.07, //60
                           child: Center(
                               child: SvgPicture.asset('assets/logo.svg'))),
                       Padding(

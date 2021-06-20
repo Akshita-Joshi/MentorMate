@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/chat_screen.dart';
@@ -55,34 +54,37 @@ class _RequestListState extends State<RequestList> {
             ));
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4),
+        padding: EdgeInsets.symmetric(
+            horizontal: width * 0.03, vertical: height * 0.0045), //12 4
         child: ClipRRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
             child: Container(
-              height: 80,
+              height: height * 0.094, //80
               width: width,
               decoration: BoxDecoration(
                   color: grey.withOpacity(0.4),
                   borderRadius: BorderRadius.circular(10)),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                padding: EdgeInsets.symmetric(horizontal: width * 0.045), //18
                 child: Center(
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        height: 20,
+                        height: height * 0.023, //20
                         child: SvgPicture.asset('assets/meet.svg'),
                       ),
                       SizedBox(
-                        width: 20,
+                        width: width * 0.05, //20
                       ),
                       Flexible(
                         child: Text(
                           '${req.student} has requested for a meet',
                           style: TextStyle(
-                              fontFamily: "MontserratM", fontSize: 16),
+                              fontFamily: "MontserratM",
+                              fontSize: width * 0.04 //16
+                              ),
                         ),
                       ),
                     ],
@@ -108,17 +110,5 @@ class _RequestListState extends State<RequestList> {
                 child: _requestTiles[index]);
           }),
     );
-  }
-}
-
-class RequestCard extends StatefulWidget {
-  @override
-  _RequestCardState createState() => _RequestCardState();
-}
-
-class _RequestCardState extends State<RequestCard> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
