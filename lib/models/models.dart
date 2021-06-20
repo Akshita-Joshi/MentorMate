@@ -15,3 +15,19 @@ class DoubtModel {
   String description;
   bool solved;
 }
+
+class Messages {
+  String from;
+  String message;
+  String time;
+  String type;
+  String title;
+  String description;
+  Messages(
+      {this.from,
+      this.message,
+      this.time,
+      this.type,
+      this.title,
+      this.description});
+}

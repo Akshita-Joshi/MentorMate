@@ -79,7 +79,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
               width: width,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(0),
                 boxShadow: [
                   //background color of box
                   BoxShadow(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/components/bottom_drawer.dart';
+import 'package:mentor_mate/models/models.dart';
 import 'globals.dart';
 //this file has the chat screen
 
@@ -10,6 +11,30 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  List<Messages> _msgs = [
+    Messages(
+        from: "receiver",
+        message:
+            "It's very simple, just change your settings in your IDE regarding declaration and it will work",
+        time: '9:36 AM',
+        type: 'chat'),
+    Messages(from: "sender", message: "..", time: '9:31 AM', type: 'chat'),
+    Messages(
+        from: "sender", message: "Okay ma'am", time: '9:31 AM', type: 'chat'),
+    Messages(
+        from: "receiver",
+        message: "Lets schedule a meet at 5:30 pm",
+        time: '9:30 AM',
+        type: 'chat'),
+    Messages(
+        from: "receiver",
+        message: "null",
+        time: '9:30 AM',
+        type: 'doubt',
+        title: 'What are classes in CPP ?',
+        description:
+            'Good evening ma’am , I was trying to make a class in cpp but the compiler is showing error everytime. '),
+  ];
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -73,37 +98,38 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  DoubtMessage(),
-                  Message(
-                      from: "receiver",
-                      message: "Lets schedule a meet at 5:30 pm",
-                      time: '9:30 AM'),
-                  Message(
-                      from: "sender", message: "Okay ma'am", time: '9:31 AM'),
-                  Message(from: "sender", message: "..", time: '9:31 AM'),
-                  Message(
-                      from: "receiver",
-                      message:
-                          "It's very simple, just change your settings in your IDE regarding declaration and it will work",
-                      time: '9:36 AM'),
-                ],
-              ),
-            ),
-            Positioned(
-                bottom: 18, //18
-                child: Container(width: width, child: TextInput())),
-            //this widget is bottom drawer
-            BottomDrawer(
-              showMenu: Drawerclass.showMenu,
-            )
-          ],
-        ),
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              Expanded(
+                  child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: _msgs.length,
+                      reverse: true,
+                      itemBuilder: (BuildContext context, index) {
+                        return _msgs[index].type.toString() == 'chat'
+                            ? Message(
+                                from: _msgs[index].from.toString(),
+                                message: _msgs[index].message.toString(),
+                                time: _msgs[index].time.toString(),
+                              )
+                            : DoubtMessage(
+                                title: _msgs[index].title.toString(),
+                                description:
+                                    _msgs[index].description.toString(),
+                                time: _msgs[index].time.toString(),
+                              );
+                      })),
+              Container(width: width, child: TextInput()),
+            ],
+          ),
+
+          //this widget is bottom drawer
+          BottomDrawer(
+            showMenu: Drawerclass.showMenu,
+          )
+        ],
       ),
     );
   }
@@ -164,6 +190,11 @@ class _MessageState extends State<Message> {
 }
 
 class DoubtMessage extends StatefulWidget {
+  String title;
+  String description;
+  String time;
+
+  DoubtMessage({this.title, this.description, this.time});
   @override
   _DoubtMessageState createState() => _DoubtMessageState();
 }
@@ -193,7 +224,7 @@ class _DoubtMessageState extends State<DoubtMessage> {
                     ),
                   ),
                 ),
-                Text('What are classes in CPP ?',
+                Text(widget.title,
                     style: TextStyle(
                       fontFamily: "MontserratSB",
                       fontSize: width * 0.061, //24
@@ -207,12 +238,21 @@ class _DoubtMessageState extends State<DoubtMessage> {
                   top: height * 0.011,
                   bottom: height * 0.011), //20 10 10
               child: Text(
-                'Good evening ma’am , I was trying to make a class in cpp but the compiler is showing error everytime. ',
+                widget.description,
                 style: TextStyle(
                     fontFamily: "Montserrat",
                     fontSize: width * 0.045, //18
                     color: Colors.black.withOpacity(0.6)),
               ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  left: width * 0.05, top: height * 0.009), //20 8
+              child: Text(widget.time,
+                  style: TextStyle(
+                      fontFamily: "MontserratM",
+                      fontSize: width * 0.035, //14
+                      color: Colors.black.withOpacity(0.3))),
             ),
           ],
         ),
