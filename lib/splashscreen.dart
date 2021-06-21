@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mentor_mate/chat_screen.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/home.dart';
 import 'package:mentor_mate/welcome_and_other.dart';
@@ -32,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void navigationPage() {
     Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (BuildContext context) => Welcome()));
+        MaterialPageRoute(builder: (BuildContext context) => ChatScreen()));
   }
 
   @override

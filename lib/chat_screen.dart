@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/components/bottom_drawer.dart';
+import 'package:mentor_mate/components/popup.dart';
 import 'package:mentor_mate/models/models.dart';
 import 'globals.dart';
 //this file has the chat screen
@@ -39,6 +40,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+    const String _heroAddTodo = 'add-todo-hero';
 
     return Scaffold(
       //resizeToAvoidBottomInset: false,
@@ -89,9 +91,35 @@ class _ChatScreenState extends State<ChatScreen> {
                   SizedBox(
                     width: width * 0.076, //30
                   ),
-                  Container(
-                      height: width * 0.152, //60
-                      child: Center(child: SvgPicture.asset('assets/meet.svg')))
+                  InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .push(HeroDialogRoute(builder: (context) {
+                          return MeetRequestPopupCard();
+                        }));
+                      },
+                      child:
+                          /*Container(
+                        height: width * 0.152, //60
+                        child:
+                            Center(child: SvgPicture.asset('assets/meet.svg'))),*/
+                          Hero(
+                              tag: _heroAddTodo,
+                              createRectTween: (begin, end) {
+                                return CustomRectTween(begin: begin, end: end);
+                              },
+                              child: Material(
+                                color: Colors.white,
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Container(
+                                    height: height * 0.07, //60
+                                    width: width * 0.152, //60
+                                    child: Center(
+                                        child: SvgPicture.asset(
+                                            'assets/meet.svg'))),
+                              )))
                 ],
               ),
             )
