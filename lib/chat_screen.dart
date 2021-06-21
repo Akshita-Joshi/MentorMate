@@ -284,7 +284,7 @@ class _TextInputState extends State<TextInput> {
           padding: EdgeInsets.symmetric(
               horizontal: width * 0.03, vertical: height * 0.014), //12 12
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
+            //crossAxisAlignment: CrossAxisAlignment.baseline,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(

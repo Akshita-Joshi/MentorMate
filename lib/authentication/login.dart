@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mentor_mate/authentication/authenticate.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/home.dart';
 
@@ -10,6 +11,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  bool isLoading = false;
   double emailOpacity = 0.0;
   double passOpacity = 0.0;
 
@@ -120,18 +124,24 @@ class _LoginState extends State<Login> {
                     //mainAxisSize: MainAxisSize.min,
                     //crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      //field1("Email", _email),
                       //--------------------------------
-                      _label(emailOpacity, "Email"),
+                      _label(
+                        emailOpacity,
+                        "Email",
+                      ),
                       TextFormField(
+                        controller: _email,
                         style: _inputText(),
                         decoration: InputDecoration(
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            hintStyle: _hintText(),
-                            hintText: "Email"),
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          hintStyle: _hintText(),
+                          hintText: "Email",
+                        ),
                         onChanged: (value) {
                           setState(() {
                             value != '' ? emailOpacity = 1 : emailOpacity = 0;
@@ -142,9 +152,11 @@ class _LoginState extends State<Login> {
                         },
                       ),
                       SizedBox(height: height * 0.011), //10
+                      //field2("Password", _password),
                       //--------------------------------
                       _label(passOpacity, "Password"),
                       TextFormField(
+                        controller: _password,
                         obscureText: true,
                         style: _inputText(),
                         decoration: InputDecoration(
@@ -179,19 +191,34 @@ class _LoginState extends State<Login> {
         Positioned(
           right: width * 0.254, //100
           bottom: height * 0.07, //60
-          child: [
-            emailOpacity,
-            passOpacity,
-          ].every((element) => element == 1.0)
+          child: (_email.text.isNotEmpty && _password.text.isNotEmpty)
               ? AnimatedTextKit(
                   pause: Duration(milliseconds: 1500),
                   repeatForever: true,
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => StudentHome(),
-                        ));
+                    if (_email.text.isNotEmpty && _password.text.isNotEmpty) {
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      logIn(_email.text, _password.text).then((user) {
+                        if (user != null) {
+                          print("Login Successful");
+                          setState(() {
+                            isLoading = false;
+                          });
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => StudentHome()));
+                        } else {
+                          print("Login Failed");
+                          setState(() {
+                            isLoading = false;
+                          });
+                        }
+                      });
+                    } else {
+                      print("Please fill form correctly");
+                    }
                   },
                   animatedTexts: [
                       TyperAnimatedText(

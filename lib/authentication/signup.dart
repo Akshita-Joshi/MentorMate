@@ -1,8 +1,11 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mentor_mate/authentication/authenticate.dart';
+import 'package:mentor_mate/authentication/login.dart';
 import 'package:mentor_mate/authentication/register.dart';
 import 'package:mentor_mate/globals.dart';
+import 'package:mentor_mate/home.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -10,6 +13,9 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  bool isLoading = false;
   double emailOpacity = 0.0;
   double passOpacity = 0.0;
 
@@ -123,6 +129,7 @@ class _SignUpState extends State<SignUp> {
                       //--------------------------------
                       _label(emailOpacity, "Email"),
                       TextFormField(
+                        controller: _email,
                         style: _inputText(),
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -145,6 +152,7 @@ class _SignUpState extends State<SignUp> {
                       //--------------------------------
                       _label(passOpacity, "Password"),
                       TextFormField(
+                        controller: _password,
                         obscureText: true,
                         style: _inputText(),
                         decoration: InputDecoration(
@@ -187,11 +195,29 @@ class _SignUpState extends State<SignUp> {
                   pause: Duration(milliseconds: 1500),
                   repeatForever: true,
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Register(),
-                        ));
+                    if (_email.text.isNotEmpty && _password.text.isNotEmpty) {
+                      setState(() {
+                        isLoading = true;
+                      });
+
+                      createAccount(_email.text, _password.text).then((user) {
+                        if (user != null) {
+                          setState(() {
+                            isLoading = false;
+                          });
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => Login()));
+                          print("Account Created Sucessful");
+                        } else {
+                          print("Login Failed");
+                          setState(() {
+                            isLoading = false;
+                          });
+                        }
+                      });
+                    } else {
+                      print("Please enter Fields");
+                    }
                   },
                   animatedTexts: [
                       TyperAnimatedText(
