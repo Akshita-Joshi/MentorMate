@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mentor_mate/chat/firebase.dart';
 import 'package:mentor_mate/globals.dart';
 
 class BottomDrawer extends StatefulWidget {
-  bool showMenu;
+  bool? showMenu;
   BottomDrawer({this.showMenu});
   @override
   _BottomDrawerState createState() => _BottomDrawerState();
@@ -22,7 +23,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
           text,
           style: TextStyle(
               fontFamily: "MontserratM",
-              fontSize: width * 0.035, //14
+              fontSize: width! * 0.035, //14
               color: Colors.black.withOpacity(0.3)),
         ),
       ),
@@ -32,14 +33,14 @@ class _BottomDrawerState extends State<BottomDrawer> {
   static TextStyle _hintText() {
     return TextStyle(
         fontFamily: "MontserratM",
-        fontSize: width * 0.061, //24
+        fontSize: width! * 0.061, //24
         color: Colors.black.withOpacity(0.3));
   }
 
   static TextStyle _inputText1() {
     return TextStyle(
       fontFamily: "MontserratSB",
-      fontSize: width * 0.061, //24
+      fontSize: width! * 0.061, //24
       color: Colors.black,
     );
   }
@@ -47,7 +48,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
   static TextStyle _inputText2() {
     return TextStyle(
         fontFamily: "Montserrat",
-        fontSize: width * 0.045, //18
+        fontSize: width! * 0.045, //18
         color: Colors.black.withOpacity(0.6));
   }
 
@@ -66,7 +67,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
       curve: Curves.easeInOut,
       duration: Duration(milliseconds: 200),
       left: 0,
-      bottom: (widget.showMenu)
+      bottom: (widget.showMenu!)
           ? -(height * 0.164) //-140
           : -(height * 0.822), // -700
       child: Column(
@@ -86,7 +87,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
                     color: Colors.black.withOpacity(0.3),
                     blurRadius: 25.0, // soften the shadow
                     spreadRadius:
-                        widget.showMenu ? 500.0 : 0, //extend the shadow
+                        widget.showMenu! ? 500.0 : 0, //extend the shadow
                     offset: Offset(
                       15.0, // Move to right 10  horizontally
                       15.0, // Move to bottom 10 Vertically
@@ -112,6 +113,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
                                 setState(() {
                                   Drawerclass.showMenu = false;
                                   widget.showMenu = false;
+                                  type = '';
                                 });
                               },
                               child: Container(
@@ -138,6 +140,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
                             children: [
                               _label(doubtOpacity, "Doubt title"),
                               TextFormField(
+                                controller: messageTitle,
                                 keyboardType: TextInputType.multiline,
                                 minLines: 1,
                                 maxLines: 2,
@@ -164,6 +167,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
                               SizedBox(height: height * 0.011), //10
                               _label(doubtdesOpacity, "Doubt description"),
                               TextFormField(
+                                controller: messageDescription,
                                 keyboardType: TextInputType.multiline,
                                 minLines: 1,
                                 maxLines: 5,
@@ -215,7 +219,32 @@ class _BottomDrawerState extends State<BottomDrawer> {
                                                 color: Colors.black))
                                       ],
                                     ),
-                                  )))
+                                  ))),
+                              SizedBox(height: height * 0.035), //30
+                              InkWell(
+                                onTap: () {
+                                  print(
+                                      'inside ask---------------------------');
+                                  Drawerclass.showMenu = false;
+                                  widget.showMenu = false;
+                                  onSendMessage();
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: width,
+                                  decoration: BoxDecoration(
+                                      color: grey,
+                                      borderRadius: BorderRadius.circular(6)),
+                                  child: Center(
+                                    child: Text(
+                                      'Ask',
+                                      style: TextStyle(
+                                          fontFamily: "MontserratM",
+                                          fontSize: 18),
+                                    ),
+                                  ),
+                                ),
+                              )
                             ],
                           ),
                         )

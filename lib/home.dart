@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mentor_mate/chat/firebase.dart';
 import 'package:mentor_mate/chat_screen.dart';
 import 'package:mentor_mate/components/request.dart';
+import 'package:mentor_mate/doubt_screen.dart';
 import 'package:mentor_mate/doubts_list.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/models/models.dart';
@@ -16,7 +21,7 @@ class _StudentHomeState extends State<StudentHome> {
   static TextStyle _textStyle() {
     return TextStyle(
         fontFamily: "MontserratSB",
-        fontSize: width * 0.061, //24
+        fontSize: width! * 0.061, //24
         color: Colors.black);
   }
 
@@ -25,7 +30,7 @@ class _StudentHomeState extends State<StudentHome> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       _addSubs();
     });
   }
@@ -45,10 +50,31 @@ class _StudentHomeState extends State<StudentHome> {
       ft = ft.then((data) {
         return Future.delayed(const Duration(milliseconds: 10), () {
           _subTiles.add(_buildTile(sub));
-          _listKey.currentState.insertItem(_subTiles.length - 1);
+          _listKey.currentState!.insertItem(_subTiles.length - 1);
         });
       });
     });
+  }
+
+  //Map<String, dynamic>? userMap;
+  var collectionss;
+  bool _isloading = false;
+  final TextEditingController _search = TextEditingController();
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  /*String chatRoomId(String user1, String user2) {
+    if (user1[0].toLowerCase().codeUnits[0] >
+        user2.toLowerCase().codeUnits[0]) {
+      return "$user1$user2";
+    } else {
+      return "$user2$user1";
+    }
+  }*/
+
+  void displayuserss() async {
+    var documents = await _firestore.collection('users').get();
+    print("this is display useer");
+    print(documents);
   }
 
 //this widget is the subject card
@@ -57,19 +83,27 @@ class _StudentHomeState extends State<StudentHome> {
       radius: 320,
       splashColor: Colors.black.withOpacity(0.2),
       onTap: () {
-        Navigator.push(
+        String roomId =
+            chatRoomId(_auth.currentUser!.displayName!, userMap?['name']);
+
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => DoubtScreen(
+                  chatRoomId: roomId,
+                  userMap: userMap,
+                )));
+        /*Navigator.push(
             context,
-            MaterialPageRoute(
+            CupertinoPageRoute(
               builder: (context) =>
                   ChatScreen(), //directs to chat screen on tap
-            ));
+            ));*/
       },
       child: Container(
         child: Padding(
           padding: EdgeInsets.only(
-              bottom: height * 0.014, top: height * 0.014), //12 12
+              bottom: height! * 0.014, top: height! * 0.014), //12 12
           child: Text(
-            sub.name,
+            sub.name!,
             style: _textStyle(),
           ),
         ),
@@ -83,12 +117,14 @@ class _StudentHomeState extends State<StudentHome> {
 
   @override
   Widget build(BuildContext context) {
+    displayuserss();
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        brightness: Brightness.dark,
         elevation: 0,
         backgroundColor: Colors.white,
       ),
@@ -123,15 +159,75 @@ class _StudentHomeState extends State<StudentHome> {
                   height: height * 0.141, //120
                 ),
                 Expanded(
-                  child: AnimatedList(
+                    child:
+                        /*AnimatedList(
                       key: _listKey,
                       initialItemCount: _subTiles.length,
                       itemBuilder: (context, index, animation) {
                         return SlideTransition(
                             position: animation.drive(_offset),
                             child: _subTiles[index]);
-                      }),
-                )
+                      }),*/
+                        StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('users')
+                      .snapshots(),
+                  builder: (ctx, AsyncSnapshot<QuerySnapshot> usersnapshot) {
+                    if (usersnapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return Container(
+                          child: Center(child: CircularProgressIndicator()));
+                    } else {
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: usersnapshot.data?.docs.length,
+                          itemBuilder: (context, index) {
+                            DocumentSnapshot document =
+                                usersnapshot.data!.docs[index];
+                            if (document.id == _auth.currentUser?.uid) {
+                              collectionss = document.data().toString();
+                              return Container(height: 0);
+                            }
+                            return InkWell(
+                              onTap: () {
+                                print("this is auth user");
+                                print(_auth.currentUser);
+                                print("this is usemap");
+                                setState(() {
+                                  userMap =
+                                      document.data() as Map<String, dynamic>?;
+                                });
+                                print(userMap?['name']);
+                                String roomId1 = chatRoomId(
+                                    _auth.currentUser!.displayName!,
+                                    userMap?['name']);
+                                setState(() {
+                                  roomId = roomId1;
+                                });
+
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => ChatScreen(
+                                          chatRoomId: roomId1,
+                                          userMap: userMap,
+                                        )));
+                              },
+                              child: Container(
+                                  child: Text(document
+                                      .data()
+                                      .toString()
+                                      .substring(
+                                          6,
+                                          document
+                                              .data()
+                                              .toString()
+                                              .indexOf(',')))),
+                            );
+                          },
+                        ),
+                      );
+                    }
+                  },
+                ))
               ],
             ),
           ),
@@ -161,7 +257,7 @@ class TeacherHome extends StatefulWidget {
 
 class _TeacherHomeState extends State<TeacherHome>
     with SingleTickerProviderStateMixin {
-  TabController _controller;
+  late TabController _controller;
 
   @override
   void initState() {
@@ -181,7 +277,7 @@ class _TeacherHomeState extends State<TeacherHome>
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(height * 0.082), //70
+          preferredSize: Size.fromHeight(height! * 0.082), //70
           child: AppBar(
             automaticallyImplyLeading: false,
             backgroundColor: Colors.white,
@@ -190,7 +286,7 @@ class _TeacherHomeState extends State<TeacherHome>
               child: Column(
                 children: [
                   SizedBox(
-                    height: height * 0.018, //16
+                    height: height! * 0.018, //16
                   ),
                   TabBar(
                     indicatorColor: Colors.white,
@@ -198,11 +294,11 @@ class _TeacherHomeState extends State<TeacherHome>
                     unselectedLabelColor: Colors.black.withOpacity(0.3),
                     labelStyle: TextStyle(
                         fontFamily: "MontserratM",
-                        fontSize: width * 0.040, //16
+                        fontSize: width! * 0.040, //16
                         color: Colors.black),
                     unselectedLabelStyle: TextStyle(
                         fontFamily: "MontserratM",
-                        fontSize: width * 0.040, //16
+                        fontSize: width! * 0.040, //16
                         color: Colors.black.withOpacity(0.4)),
                     controller: _controller,
                     isScrollable: false,
@@ -237,7 +333,7 @@ class _TeacherHomeState extends State<TeacherHome>
             ],
           ),
           Positioned(
-              top: height * 0.082, //70
+              top: height! * 0.082, //70
               child: RequestList())
         ]),
       ),

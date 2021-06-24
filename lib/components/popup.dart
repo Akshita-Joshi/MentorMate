@@ -1,7 +1,11 @@
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mentor_mate/chat/firebase.dart';
+import 'package:mentor_mate/chat_screen.dart';
+import 'package:mentor_mate/doubt_screen.dart';
 import 'package:mentor_mate/globals.dart';
 
 /// {@template hero_dialog_route}
@@ -12,10 +16,10 @@ import 'package:mentor_mate/globals.dart';
 class HeroDialogRoute<T> extends PageRoute<T> {
   /// {@macro hero_dialog_route}
   HeroDialogRoute({
-    @required WidgetBuilder builder,
-    RouteSettings settings,
+    @required WidgetBuilder? builder,
+    RouteSettings? settings,
     bool fullscreenDialog = false,
-  })  : _builder = builder,
+  })  : _builder = builder!,
         super(settings: settings, fullscreenDialog: fullscreenDialog);
 
   final WidgetBuilder _builder;
@@ -140,18 +144,103 @@ class _MeetRequestPopupCardState extends State<MeetRequestPopupCard> {
 class CustomRectTween extends RectTween {
   /// {@macro custom_rect_tween}
   CustomRectTween({
-    @required Rect begin,
-    @required Rect end,
+    @required Rect? begin,
+    @required Rect? end,
   }) : super(begin: begin, end: end);
 
   @override
   Rect lerp(double t) {
     final elasticCurveValue = Curves.easeOut.transform(t);
     return Rect.fromLTRB(
-      lerpDouble(begin.left, end.left, elasticCurveValue),
-      lerpDouble(begin.top, end.top, elasticCurveValue),
-      lerpDouble(begin.right, end.right, elasticCurveValue),
-      lerpDouble(begin.bottom, end.bottom, elasticCurveValue),
+      lerpDouble(begin!.left, end!.left, elasticCurveValue)!,
+      lerpDouble(begin!.top, end!.top, elasticCurveValue)!,
+      lerpDouble(begin!.right, end!.right, elasticCurveValue)!,
+      lerpDouble(begin!.bottom, end!.bottom, elasticCurveValue)!,
+    );
+  }
+}
+
+const String _heroDoubt = 'doubt';
+
+class DoubtSolvedPopup extends StatefulWidget {
+  Map<String, dynamic> map;
+  DoubtSolvedPopup({required this.map});
+  @override
+  _DoubtSolvedPopupState createState() => _DoubtSolvedPopupState();
+}
+
+class _DoubtSolvedPopupState extends State<DoubtSolvedPopup> {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Hero(
+          tag: _heroDoubt,
+          createRectTween: (begin, end) {
+            return CustomRectTween(begin: begin, end: end);
+          },
+          child: Material(
+            color: Colors.white,
+            elevation: 0,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.symmetric(vertical: 18.0),
+                        child: DoubtMessage(map: widget.map)),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 30.0),
+                      child: Container(
+                          width: 200,
+                          child: Text(
+                            'Was your doubt solved?',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: 'MontserratM', fontSize: 20),
+                          )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                      child: Divider(
+                        thickness: 0.2,
+                        color: Colors.black,
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          widget.map['solved'] = true;
+                          /*FirebaseFirestore.instance
+                              .collection('chatroom')
+                              .doc(roomId)
+                              .collection('chats')
+                              .doc(roomId)
+                              .update({'solved': true});*/
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: const Text(
+                        'Yes',
+                        style:
+                            TextStyle(fontFamily: 'MontserratB', fontSize: 18),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

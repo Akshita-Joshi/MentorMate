@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mentor_mate/chat/firebase.dart';
 import 'package:mentor_mate/components/bottom_drawer.dart';
 import 'package:mentor_mate/components/popup.dart';
 import 'package:mentor_mate/models/models.dart';
@@ -7,11 +10,42 @@ import 'globals.dart';
 //this file has the chat screen
 
 class ChatScreen extends StatefulWidget {
+  final Map<String, dynamic>? userMap;
+  String? chatRoomId;
+
+  ChatScreen({this.chatRoomId, this.userMap});
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  final TextEditingController _messagetitle = TextEditingController();
+  final TextEditingController _message = TextEditingController();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  void onSendMessage() async {
+    if (_message.text.isNotEmpty) {
+      print(_message.text);
+      Map<String, dynamic> messages = {
+        "sendby": _auth.currentUser?.displayName,
+        "message": _message.text,
+        'title': _messagetitle,
+        "time": FieldValue.serverTimestamp(),
+      };
+      message.clear();
+
+      await _firestore
+          .collection('chatroom')
+          .doc(widget.chatRoomId)
+          .collection('chats')
+          .doc(widget.chatRoomId)
+          .collection('doubts')
+          .add(messages);
+    } else {
+      print('Enter Some Text');
+    }
+  }
+
   List<Messages> _msgs = [
     Messages(
         from: "receiver",
@@ -79,6 +113,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   InkWell(
                     onTap: () {
                       setState(() {
+                        type = 'doubt';
                         Drawerclass.showMenu = true;
                       });
                     },
@@ -131,23 +166,63 @@ class _ChatScreenState extends State<ChatScreen> {
           Column(
             children: [
               Expanded(
-                  child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemCount: _msgs.length,
-                      reverse: true,
-                      itemBuilder: (BuildContext context, index) {
-                        return _msgs[index].type.toString() == 'chat'
-                            ? Message(
-                                from: _msgs[index].from.toString(),
-                                message: _msgs[index].message.toString(),
-                                time: _msgs[index].time.toString(),
-                              )
-                            : DoubtMessage(
-                                title: _msgs[index].title.toString(),
-                                description:
-                                    _msgs[index].description.toString(),
-                                time: _msgs[index].time.toString(),
-                              );
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: _firestore
+                          .collection('chatroom')
+                          .doc(widget.chatRoomId)
+                          .collection('chats')
+                          .doc(widget.chatRoomId)
+                          .collection('doubts')
+                          .orderBy('time', descending: false)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.data != null) {
+                          return ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              itemCount: snapshot.data!.docs.length,
+                              reverse: true,
+                              itemBuilder: (BuildContext context, index) {
+                                Map<String, dynamic> map =
+                                    snapshot.data!.docs[index].data()
+                                        as Map<String, dynamic>;
+                                return map['type'] == 'message'
+                                    ? Message(
+                                        map: map,
+                                      )
+                                    : InkWell(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                              HeroDialogRoute(
+                                                  builder: (context) {
+                                            return DoubtSolvedPopup(map: map);
+                                          }));
+                                        },
+                                        child: Hero(
+                                            tag: 'doubt',
+                                            createRectTween: (begin, end) {
+                                              return CustomRectTween(
+                                                  begin: begin, end: end);
+                                            },
+                                            child: DoubtMessage(map: map)));
+                                /*_msgs[index].type.toString() == 'chat'
+                                    ? Message(
+                                        from: _msgs[index].from.toString(),
+                                        message:
+                                            _msgs[index].message.toString(),
+                                        time: _msgs[index].time.toString(),
+                                        map: map,
+                                      )
+                                    : DoubtMessage(
+                                        title: _msgs[index].title.toString(),
+                                        description:
+                                            _msgs[index].description.toString(),
+                                        time: _msgs[index].time.toString(),
+                                      );*/
+                              });
+                        } else {
+                          return Container();
+                        }
                       })),
               Container(width: width, child: TextInput()),
             ],
@@ -164,12 +239,8 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class Message extends StatefulWidget {
-  String from;
-  String message;
-  String time;
-  bool read;
-
-  Message({this.from, this.message, this.time, this.read});
+  Map<String, dynamic> map;
+  Message({required this.map});
   @override
   _MessageState createState() => _MessageState();
 }
@@ -184,8 +255,9 @@ class _MessageState extends State<Message> {
       padding: EdgeInsets.symmetric(
           horizontal: width * 0.061, vertical: height * 0.009), //24 8
       child: Container(
-        alignment:
-            widget.from == 'receiver' ? Alignment.topLeft : Alignment.topRight,
+        alignment: widget.map['sendby'] == auth.currentUser!.displayName
+            ? Alignment.topRight
+            : Alignment.topLeft,
         child: Container(
           constraints: BoxConstraints(
               maxWidth: width * 0.71, minWidth: width * 0.25), //280 100
@@ -197,13 +269,13 @@ class _MessageState extends State<Message> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(widget.message,
+                Text(/*widget.message!*/ widget.map['message'],
                     style: TextStyle(
                         fontFamily: "Montserrat",
                         fontSize: width * 0.045, //18
                         color: Colors.black)),
                 SizedBox(height: height * 0.009), //8
-                Text(widget.time,
+                Text(widget.map['time'].toString(),
                     style: TextStyle(
                         fontFamily: "MontserratM",
                         fontSize: width * 0.025, //10
@@ -218,11 +290,8 @@ class _MessageState extends State<Message> {
 }
 
 class DoubtMessage extends StatefulWidget {
-  String title;
-  String description;
-  String time;
-
-  DoubtMessage({this.title, this.description, this.time});
+  Map<String, dynamic> map;
+  DoubtMessage({required this.map});
   @override
   _DoubtMessageState createState() => _DoubtMessageState();
 }
@@ -246,13 +315,18 @@ class _DoubtMessageState extends State<DoubtMessage> {
                   height: height * 0.023, //20
                   width: width * 0.05, //20
                   child: Center(
-                    child: SvgPicture.asset(
-                      'assets/round.svg',
-                      height: 5,
-                    ),
+                    child: widget.map['solved']
+                        ? SvgPicture.asset(
+                            'assets/tick.svg',
+                            height: 10,
+                          )
+                        : SvgPicture.asset(
+                            'assets/round.svg',
+                            height: 5,
+                          ),
                   ),
                 ),
-                Text(widget.title,
+                Text(widget.map['title'],
                     style: TextStyle(
                       fontFamily: "MontserratSB",
                       fontSize: width * 0.061, //24
@@ -266,7 +340,7 @@ class _DoubtMessageState extends State<DoubtMessage> {
                   top: height * 0.011,
                   bottom: height * 0.011), //20 10 10
               child: Text(
-                widget.description,
+                widget.map['description'],
                 style: TextStyle(
                     fontFamily: "Montserrat",
                     fontSize: width * 0.045, //18
@@ -276,7 +350,7 @@ class _DoubtMessageState extends State<DoubtMessage> {
             Padding(
               padding: EdgeInsets.only(
                   left: width * 0.05, top: height * 0.009), //20 8
-              child: Text(widget.time,
+              child: Text(widget.map['time'].toString(),
                   style: TextStyle(
                       fontFamily: "MontserratM",
                       fontSize: width * 0.035, //14
@@ -326,6 +400,7 @@ class _TextInputState extends State<TextInput> {
                 /*height: 50,
                 width: 200,*/
                 child: TextFormField(
+                  controller: message,
                   style: TextStyle(
                       fontFamily: "Montserrat",
                       fontSize: width * 0.045, //18
@@ -343,15 +418,23 @@ class _TextInputState extends State<TextInput> {
                       hintText: "Type Something ....."),
                 ),
               ),
-              Container(
-                height: height * 0.058, //50
-                width: width * 0.101, //40
-                child: Text(
-                  'Send',
-                  style: TextStyle(
-                      fontFamily: "MontserratM",
-                      fontSize: width * 0.035, //14
-                      color: Colors.black),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    type = 'message';
+                  });
+                  onSendMessage();
+                },
+                child: Container(
+                  height: height * 0.058, //50
+                  width: width * 0.101, //40
+                  child: Text(
+                    'Send',
+                    style: TextStyle(
+                        fontFamily: "MontserratM",
+                        fontSize: width * 0.035, //14
+                        color: Colors.black),
+                  ),
                 ),
               )
             ],

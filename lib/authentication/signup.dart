@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/authentication/authenticate.dart';
 import 'package:mentor_mate/authentication/login.dart';
 import 'package:mentor_mate/authentication/register.dart';
+import 'package:mentor_mate/components/loader.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/home.dart';
 
@@ -22,14 +23,14 @@ class _SignUpState extends State<SignUp> {
   static TextStyle _hintText() {
     return TextStyle(
         fontFamily: "MontserratM",
-        fontSize: width * 0.061, //24
+        fontSize: width! * 0.061, //24
         color: Colors.black.withOpacity(0.3));
   }
 
   static TextStyle _inputText() {
     return TextStyle(
         fontFamily: "MontserratM",
-        fontSize: width * 0.061, //24
+        fontSize: width! * 0.061, //24
         color: Colors.black);
   }
 
@@ -43,7 +44,7 @@ class _SignUpState extends State<SignUp> {
           text,
           style: TextStyle(
               fontFamily: "MontserratM",
-              fontSize: width * 0.035, //14
+              fontSize: width! * 0.035, //14
               color: Colors.black.withOpacity(0.3)),
         ),
       ),
@@ -195,6 +196,13 @@ class _SignUpState extends State<SignUp> {
                   pause: Duration(milliseconds: 1500),
                   repeatForever: true,
                   onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => Loader(
+                                  message:
+                                      'Creating your account \nPlease wait.. ',
+                                )));
                     if (_email.text.isNotEmpty && _password.text.isNotEmpty) {
                       setState(() {
                         isLoading = true;
@@ -210,6 +218,8 @@ class _SignUpState extends State<SignUp> {
                           print("Account Created Sucessful");
                         } else {
                           print("Login Failed");
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => SignUp()));
                           setState(() {
                             isLoading = false;
                           });

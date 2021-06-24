@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mentor_mate/chat/firebase.dart';
 import 'package:mentor_mate/chat_screen.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/home.dart';
@@ -22,8 +23,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
+    isUserLoggedIn();
     _loadWidget();
+  }
+
+  Future<bool> isUserLoggedIn() async {
+    setState(() async {
+      userMap = await auth.currentUser as Map<String, dynamic>;
+    });
+    return userMap != null;
   }
 
   _loadWidget() async {
@@ -32,8 +40,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void navigationPage() {
-    Navigator.pushReplacement(context,
-        MaterialPageRoute(builder: (BuildContext context) => ChatScreen()));
+    print('---------------------');
+    print(userMap);
+    //await isUserLoggedIn();
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                auth.currentUser != null ? StudentHome() : Welcome()));
   }
 
   @override

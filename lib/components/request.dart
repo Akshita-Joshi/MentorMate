@@ -18,7 +18,7 @@ class _RequestListState extends State<RequestList> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       _addreq();
     });
   }
@@ -34,7 +34,7 @@ class _RequestListState extends State<RequestList> {
       ft = ft.then((data) {
         return Future.delayed(const Duration(milliseconds: 10), () {
           _requestTiles.add(_buildTile(req));
-          _listKey.currentState.insertItem(_requestTiles.length - 1);
+          _listKey.currentState!.insertItem(_requestTiles.length - 1);
         });
       });
     });

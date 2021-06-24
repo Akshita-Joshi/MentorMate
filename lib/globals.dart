@@ -11,11 +11,23 @@ class Authcheck {
 
 final grey = const Color(0xFFe0e3e3).withOpacity(0.5);
 
-double height;
-double width;
+double? height;
+double? width;
 void media(BuildContext context) {
   height = MediaQuery.of(context).size.height;
   width = MediaQuery.of(context).size.width;
 }
 
 const String _heroAddTodo = 'add-todo-hero';
+const String _heroDoubt = 'doubt';
+TextEditingController message = TextEditingController();
+TextEditingController messageTitle = TextEditingController();
+TextEditingController messageDescription = TextEditingController();
+String? type;
+String? role;
+
+TextEditingController nameController = TextEditingController();
+TextEditingController yearController = TextEditingController();
+TextEditingController divController = TextEditingController();
+TextEditingController branchController = TextEditingController();
+TextEditingController rollController = TextEditingController();

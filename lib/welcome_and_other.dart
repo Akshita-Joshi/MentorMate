@@ -146,6 +146,9 @@ class _StudentorTeacherState extends State<StudentorTeacher> {
                 child: Container(
                   child: AnimatedTextKit(
                       onTap: () {
+                        setState(() {
+                          role = 'student';
+                        });
                         Authcheck.process == 'signup'
                             ? Navigator.push(
                                 context,
@@ -187,6 +190,9 @@ class _StudentorTeacherState extends State<StudentorTeacher> {
                 child: Container(
                   child: AnimatedTextKit(
                       onTap: () {
+                        setState(() {
+                          role = 'teacher';
+                        });
                         Navigator.push(
                             context,
                             MaterialPageRoute(

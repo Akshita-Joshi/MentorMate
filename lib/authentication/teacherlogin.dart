@@ -15,14 +15,14 @@ class _TeacherLoginState extends State<TeacherLogin> {
   static TextStyle _hintText() {
     return TextStyle(
         fontFamily: "MontserratM",
-        fontSize: width * 0.061, //24
+        fontSize: width! * 0.061, //24
         color: Colors.black.withOpacity(0.3));
   }
 
   static TextStyle _inputText() {
     return TextStyle(
         fontFamily: "MontserratM",
-        fontSize: width * 0.061, //24
+        fontSize: width! * 0.061, //24
         color: Colors.black);
   }
 
@@ -36,7 +36,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
           text,
           style: TextStyle(
               fontFamily: "MontserratM",
-              fontSize: width * 0.035, //14
+              fontSize: width! * 0.035, //14
               color: Colors.black.withOpacity(0.3)),
         ),
       ),

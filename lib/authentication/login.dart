@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/authentication/authenticate.dart';
+import 'package:mentor_mate/components/loader.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/home.dart';
 
@@ -20,14 +21,14 @@ class _LoginState extends State<Login> {
   static TextStyle _hintText() {
     return TextStyle(
         fontFamily: "MontserratM",
-        fontSize: width * 0.061, //24
+        fontSize: width! * 0.061, //24
         color: Colors.black.withOpacity(0.3));
   }
 
   static TextStyle _inputText() {
     return TextStyle(
         fontFamily: "MontserratM",
-        fontSize: width * 0.061, //24
+        fontSize: width! * 0.061, //24
         color: Colors.black);
   }
 
@@ -41,7 +42,7 @@ class _LoginState extends State<Login> {
           text,
           style: TextStyle(
               fontFamily: "MontserratM",
-              fontSize: width * 0.035, //14
+              fontSize: width! * 0.035, //14
               color: Colors.black.withOpacity(0.3)),
         ),
       ),
@@ -196,6 +197,13 @@ class _LoginState extends State<Login> {
                   pause: Duration(milliseconds: 1500),
                   repeatForever: true,
                   onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => Loader(
+                                  message:
+                                      'Please wait while we \nlog you in..',
+                                )));
                     if (_email.text.isNotEmpty && _password.text.isNotEmpty) {
                       setState(() {
                         isLoading = true;
@@ -204,13 +212,15 @@ class _LoginState extends State<Login> {
                       logIn(_email.text, _password.text).then((user) {
                         if (user != null) {
                           print("Login Successful");
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => StudentHome()));
                           setState(() {
                             isLoading = false;
                           });
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => StudentHome()));
                         } else {
                           print("Login Failed");
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => Login()));
                           setState(() {
                             isLoading = false;
                           });
