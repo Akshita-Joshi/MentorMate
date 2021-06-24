@@ -14,8 +14,6 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  final TextEditingController _email = TextEditingController();
-  final TextEditingController _password = TextEditingController();
   bool isLoading = false;
   double emailOpacity = 0.0;
   double passOpacity = 0.0;
@@ -130,7 +128,7 @@ class _SignUpState extends State<SignUp> {
                       //--------------------------------
                       _label(emailOpacity, "Email"),
                       TextFormField(
-                        controller: _email,
+                        controller: email,
                         style: _inputText(),
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -153,7 +151,7 @@ class _SignUpState extends State<SignUp> {
                       //--------------------------------
                       _label(passOpacity, "Password"),
                       TextFormField(
-                        controller: _password,
+                        controller: password,
                         obscureText: true,
                         style: _inputText(),
                         decoration: InputDecoration(
@@ -203,18 +201,18 @@ class _SignUpState extends State<SignUp> {
                                   message:
                                       'Creating your account \nPlease wait.. ',
                                 )));
-                    if (_email.text.isNotEmpty && _password.text.isNotEmpty) {
+                    if (email.text.isNotEmpty && password.text.isNotEmpty) {
                       setState(() {
                         isLoading = true;
                       });
 
-                      createAccount(_email.text, _password.text).then((user) {
+                      createAccount(email.text, password.text).then((user) {
                         if (user != null) {
                           setState(() {
                             isLoading = false;
                           });
                           Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => Login()));
+                              MaterialPageRoute(builder: (_) => Register()));
                           print("Account Created Sucessful");
                         } else {
                           print("Login Failed");

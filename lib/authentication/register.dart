@@ -1,6 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mentor_mate/authentication/authenticate.dart';
+import 'package:mentor_mate/authentication/login.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/home.dart';
 
@@ -126,6 +128,7 @@ class _RegisterState extends State<Register> {
                       //--------------------------------
                       _label(nameOpacity, "Name"),
                       TextFormField(
+                        controller: nameController,
                         style: _inputText(),
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -148,6 +151,7 @@ class _RegisterState extends State<Register> {
                       //--------------------------------
                       _label(yearOpacity, "Year"),
                       TextFormField(
+                        controller: yearController,
                         style: _inputText(),
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -170,6 +174,7 @@ class _RegisterState extends State<Register> {
                       //--------------------------------
                       _label(branchOpacity, "Branch"),
                       TextFormField(
+                        controller: branchController,
                         style: _inputText(),
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -192,6 +197,7 @@ class _RegisterState extends State<Register> {
                       //--------------------------------
                       _label(divOpacity, "Division"),
                       TextFormField(
+                        controller: divController,
                         style: _inputText(),
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -214,6 +220,7 @@ class _RegisterState extends State<Register> {
                       //--------------------------------
                       _label(rollOpacity, "Roll No"),
                       TextFormField(
+                        controller: rollController,
                         style: _inputText(),
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -256,10 +263,11 @@ class _RegisterState extends State<Register> {
                   pause: Duration(milliseconds: 1500),
                   repeatForever: true,
                   onTap: () {
+                    addUserData();
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => StudentHome(),
+                          builder: (context) => Login(),
                         ));
                   },
                   animatedTexts: [

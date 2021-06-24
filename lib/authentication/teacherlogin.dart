@@ -1,6 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mentor_mate/authentication/authenticate.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/home.dart';
 
@@ -10,7 +11,11 @@ class TeacherLogin extends StatefulWidget {
 }
 
 class _TeacherLoginState extends State<TeacherLogin> {
-  double seqOpacity = 0.0;
+  double nameOpacity = 0.0;
+  double fyOpacity = 0.0;
+  double syOpacity = 0.0;
+  double tyOpacity = 0.0;
+  double btechOpacity = 0.0;
 
   static TextStyle _hintText() {
     return TextStyle(
@@ -97,7 +102,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
                         height: height * 0.058, //50
                       ),
                       Text(
-                        "Login ",
+                        "Register ",
                         style: TextStyle(
                           fontFamily: "MontserratB",
                           fontSize: width * 0.112, //44
@@ -121,8 +126,9 @@ class _TeacherLoginState extends State<TeacherLogin> {
                     //crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       //--------------------------------
-                      _label(seqOpacity, "Sequence No."),
+                      _label(nameOpacity, "Name"),
                       TextFormField(
+                        controller: nameControllerT,
                         style: _inputText(),
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -131,10 +137,10 @@ class _TeacherLoginState extends State<TeacherLogin> {
                             errorBorder: InputBorder.none,
                             disabledBorder: InputBorder.none,
                             hintStyle: _hintText(),
-                            hintText: "Enter 8 digit Sequence no."),
+                            hintText: "Enter Name"),
                         onChanged: (value) {
                           setState(() {
-                            value != '' ? seqOpacity = 1 : seqOpacity = 0;
+                            value != '' ? nameOpacity = 1 : nameOpacity = 0;
                           });
                         },
                         onFieldSubmitted: (value) {
@@ -142,6 +148,94 @@ class _TeacherLoginState extends State<TeacherLogin> {
                         },
                       ),
                       SizedBox(height: height * 0.011), //10
+                      _label(fyOpacity, "FY Subject"),
+                      TextFormField(
+                        controller: fyControllerT,
+                        style: _inputText(),
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            hintStyle: _hintText(),
+                            hintText: "Enter FY Subject"),
+                        onChanged: (value) {
+                          setState(() {
+                            value != '' ? fyOpacity = 1 : fyOpacity = 0;
+                          });
+                        },
+                        onFieldSubmitted: (value) {
+                          _callOnTop();
+                        },
+                      ),
+                      SizedBox(height: height * 0.011),
+                      _label(syOpacity, "SY Subject"),
+                      TextFormField(
+                        controller: syControllerT,
+                        style: _inputText(),
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            hintStyle: _hintText(),
+                            hintText: "Enter SY Subject"),
+                        onChanged: (value) {
+                          setState(() {
+                            value != '' ? syOpacity = 1 : syOpacity = 0;
+                          });
+                        },
+                        onFieldSubmitted: (value) {
+                          _callOnTop();
+                        },
+                      ),
+                      SizedBox(height: height * 0.011),
+                      _label(tyOpacity, "TY Subject"),
+                      TextFormField(
+                        controller: tyControllerT,
+                        style: _inputText(),
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            hintStyle: _hintText(),
+                            hintText: "Enter TY Subject"),
+                        onChanged: (value) {
+                          setState(() {
+                            value != '' ? tyOpacity = 1 : tyOpacity = 0;
+                          });
+                        },
+                        onFieldSubmitted: (value) {
+                          _callOnTop();
+                        },
+                      ),
+                      SizedBox(height: height * 0.011),
+                      _label(btechOpacity, "BTech Subject"),
+                      TextFormField(
+                        controller: btechControllerT,
+                        style: _inputText(),
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            hintStyle: _hintText(),
+                            hintText: "Enter BTech Subject"),
+                        onChanged: (value) {
+                          setState(() {
+                            value != '' ? btechOpacity = 1 : btechOpacity = 0;
+                          });
+                        },
+                        onFieldSubmitted: (value) {
+                          _callOnTop();
+                        },
+                      ),
+                      SizedBox(height: height * 0.011),
                       //--------------------------------
 
                       SizedBox(
@@ -158,12 +252,13 @@ class _TeacherLoginState extends State<TeacherLogin> {
           right: width * 0.254, //100
           bottom: height * 0.070, //60
           child: [
-            seqOpacity,
+            nameOpacity,
           ].every((element) => element == 1.0)
               ? AnimatedTextKit(
                   pause: Duration(milliseconds: 1500),
                   repeatForever: true,
                   onTap: () {
+                    addTeacher();
                     Navigator.push(
                         context,
                         MaterialPageRoute(

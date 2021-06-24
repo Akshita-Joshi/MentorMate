@@ -85,10 +85,9 @@ void addUserData() async {
       yearController.text.isNotEmpty &&
       rollController.text.isNotEmpty) {
     print(message.text);
-    //final Timestamp timestamp = FieldValue.serverTimestamp() as Timestamp;
-    final DateTime now = DateTime.now();
 
     Map<String, dynamic> userData = {
+      'email': email.text,
       "name": nameController.text,
       'year': yearController.text,
       'branch': branchController.text,
@@ -96,14 +95,38 @@ void addUserData() async {
       "roll": rollController.text,
       'role': role,
     };
-    message.clear();
-
-    type = null;
 
     await _firestore
         .collection('users')
         .doc(_auth.currentUser!.uid)
-        .add(userData);
+        .set(userData);
+  } else {
+    print('Enter Some Text');
+  }
+}
+
+void addTeacher() async {
+  if (nameController.text.isNotEmpty &&
+      branchController.text.isNotEmpty &&
+      divController.text.isNotEmpty &&
+      yearController.text.isNotEmpty &&
+      rollController.text.isNotEmpty) {
+    print(message.text);
+
+    Map<String, dynamic> userData = {
+      'email': email.text,
+      "name": nameControllerT.text,
+      'FY': fyControllerT.text,
+      'SY': syControllerT.text,
+      'TY': tyControllerT.text,
+      "BTech": btechControllerT.text,
+      'role': role,
+    };
+
+    await _firestore
+        .collection('users')
+        .doc(_auth.currentUser!.uid)
+        .set(userData);
   } else {
     print('Enter Some Text');
   }

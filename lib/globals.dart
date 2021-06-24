@@ -31,3 +31,12 @@ TextEditingController yearController = TextEditingController();
 TextEditingController divController = TextEditingController();
 TextEditingController branchController = TextEditingController();
 TextEditingController rollController = TextEditingController();
+
+TextEditingController email = TextEditingController();
+TextEditingController password = TextEditingController();
+
+TextEditingController nameControllerT = TextEditingController();
+TextEditingController fyControllerT = TextEditingController();
+TextEditingController syControllerT = TextEditingController();
+TextEditingController tyControllerT = TextEditingController();
+TextEditingController btechControllerT = TextEditingController();
