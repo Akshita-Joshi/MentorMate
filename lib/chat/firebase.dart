@@ -16,13 +16,37 @@ String chatRoomId(String user1, String user2) {
 
 String roomId = chatRoomId(auth.currentUser!.displayName!, userMap?['name']);
 
+void getUser() async {
+  _firestore.collection("users").doc(auth.currentUser!.uid).get().then((value) {
+    print(value.data());
+    print(value.data()!['name']);
+    currentUser = value.data()!['name'];
+  });
+}
+
 void onSendMessage() async {
-  var user =
-      await _firestore.collection('users').doc(auth.currentUser!.uid).get();
+  var user;
+  await _firestore
+      .collection("users")
+      .doc(auth.currentUser!.uid)
+      .get()
+      .then((value) {
+    print(value.data());
+    print(value.data()!['name']);
+    currentUser = value.data()!['name'];
+    user = value.data();
+  });
+
   if (message.text.isNotEmpty || messageTitle.text.isNotEmpty) {
     print(message.text);
-    //final Timestamp timestamp = FieldValue.serverTimestamp() as Timestamp;
     final DateTime now = DateTime.now();
+    print('this is user data inside doubts----------------------------------');
+    print(user['name']);
+    if (message.text.isNotEmpty) {
+      type = 'message';
+    } else if (messageTitle.text.isNotEmpty) {
+      type = 'doubt';
+    }
 
     Map<String, dynamic> messages = {
       "sendby": user['role'].toString(),
@@ -34,9 +58,14 @@ void onSendMessage() async {
       "time": '${now.hour} : ${now.minute}',
       'name': user['name'].toString(),
       'studentKey':
-          '${user['year']}${user['branch']}${user['div']}${user['roll']}'
+          '${user['year']} ${user['branch']} ${user['div']} ${user['roll']}'
     };
     message.clear();
+    messageTitle.clear();
+    messageDescription.clear();
+    if (type == 'doubt') {
+      addDoubts(messages);
+    }
 
     type = null;
 
@@ -50,4 +79,8 @@ void onSendMessage() async {
   } else {
     print('Enter Some Text');
   }
+}
+
+void addDoubts(Map<String, dynamic> doubtmessage) async {
+  await _firestore.collection('doubts').add(doubtmessage);
 }

@@ -1,7 +1,9 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/authentication/authenticate.dart';
+import 'package:mentor_mate/chat/firebase.dart';
 import 'package:mentor_mate/components/loader.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/home.dart';
@@ -209,11 +211,50 @@ class _LoginState extends State<Login> {
                         isLoading = true;
                       });
 
-                      logIn(_email.text, _password.text).then((user) {
+                      logIn(_email.text, _password.text).then((user) async {
                         if (user != null) {
+                          getUser();
+                          var userMap;
+                          var teacherMap;
+                          role == 'student'
+                              ? await FirebaseFirestore.instance
+                                  .collection("users")
+                                  .doc(auth.currentUser!.uid)
+                                  .get()
+                                  .then((value) {
+                                  print(value.data());
+                                  print(value.data()!['name']);
+                                  currentUser = value.data()!['name'];
+                                  setState(() {
+                                    userMap = value.data()!;
+                                  });
+                                })
+                              : await FirebaseFirestore.instance
+                                  .collection("teachers")
+                                  .doc(auth.currentUser!.uid)
+                                  .get()
+                                  .then((value) {
+                                  print(value.data());
+                                  print(value.data()!['name']);
+                                  currentUser = value.data()!['name'];
+                                  setState(() {
+                                    teacherMap = value.data()!;
+                                  });
+                                });
+
                           print("Login Successful");
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => StudentHome()));
+                          role == 'student'
+                              ? Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          StudentHome(userMap: userMap)))
+                              : Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => TeacherHome(
+                                            teacherMap: teacherMap,
+                                          )));
                           setState(() {
                             isLoading = false;
                           });

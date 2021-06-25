@@ -193,11 +193,17 @@ class _StudentorTeacherState extends State<StudentorTeacher> {
                         setState(() {
                           role = 'teacher';
                         });
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => TeacherLogin(),
-                            ));
+                        Authcheck.process == 'signup'
+                            ? Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SignUp(),
+                                ))
+                            : Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Login(),
+                                ));
                       },
                       totalRepeatCount: 2,
                       isRepeatingAnimation: true,
