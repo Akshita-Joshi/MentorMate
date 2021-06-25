@@ -18,6 +18,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
   double tyOpacity = 0.0;
   double btechOpacity = 0.0;
   double seqOpacity = 0.0;
+  double present = 0.0;
 
   static TextStyle _hintText() {
     return TextStyle(
@@ -153,22 +154,21 @@ class _TeacherLoginState extends State<TeacherLogin> {
                             '05250123',
                             '49709123'
                           ];
-                          var element = seqControllerT.text;
-                          var present = false;
                           for (var i = 0; i < myList.length; i++) {
-                            if (element == myList[i]) {
-                              present = true;
+                            if (value == myList[i]) {
+                              setState(() {
+                                present = 1.0;
+                              });
                               break;
                             }
                           }
-                          if (present) {
-                            print('$element is present in the list $myList');
+                          print(seqControllerT.text);
+                          if (present == 1.0) {
+                            print('$value is present in the list $myList');
                           } else {
-                            print(
-                                '$element is not present in the list $myList');
+                            print('$value is not present in the list $myList');
                           }
                         },
-                        //_callOnTop();
                       ),
                       SizedBox(height: height * 0.011), //10
                       _label(nameOpacity, "Name"),
@@ -296,9 +296,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
         Positioned(
           right: width * 0.254, //100
           bottom: height * 0.070, //60
-          child: [
-            nameOpacity,
-          ].every((element) => element == 1.0)
+          child: [nameOpacity, present].every((element) => element == 1.0)
               ? AnimatedTextKit(
                   pause: Duration(milliseconds: 1500),
                   repeatForever: true,
