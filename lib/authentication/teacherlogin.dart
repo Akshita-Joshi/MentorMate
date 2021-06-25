@@ -19,6 +19,8 @@ class _TeacherLoginState extends State<TeacherLogin> {
   double syOpacity = 0.0;
   double tyOpacity = 0.0;
   double btechOpacity = 0.0;
+  double seqOpacity = 0.0;
+  double present = 0.0;
 
   static TextStyle _hintText() {
     return TextStyle(
@@ -129,6 +131,48 @@ class _TeacherLoginState extends State<TeacherLogin> {
                     //crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       //--------------------------------
+                      _label(seqOpacity, "Sequence No."),
+                      TextFormField(
+                        controller: seqControllerT,
+                        style: _inputText(),
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            hintStyle: _hintText(),
+                            hintText: "Enter 8 digit Sequence no."),
+                        onChanged: (value) {
+                          setState(() {
+                            value != '' ? seqOpacity = 1 : seqOpacity = 0;
+                          });
+                        },
+                        onFieldSubmitted: (value) {
+                          var myList = [
+                            '83895123',
+                            '39128123',
+                            '63385123',
+                            '05250123',
+                            '49709123'
+                          ];
+                          for (var i = 0; i < myList.length; i++) {
+                            if (value == myList[i]) {
+                              setState(() {
+                                present = 1.0;
+                              });
+                              break;
+                            }
+                          }
+                          print(seqControllerT.text);
+                          if (present == 1.0) {
+                            print('$value is present in the list $myList');
+                          } else {
+                            print('$value is not present in the list $myList');
+                          }
+                        },
+                      ),
+                      SizedBox(height: height * 0.011), //10
                       _label(nameOpacity, "Name"),
                       TextFormField(
                         controller: nameControllerT,
@@ -254,9 +298,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
         Positioned(
           right: width * 0.254, //100
           bottom: height * 0.070, //60
-          child: [
-            nameOpacity,
-          ].every((element) => element == 1.0)
+          child: [nameOpacity, present].every((element) => element == 1.0)
               ? AnimatedTextKit(
                   pause: Duration(milliseconds: 1500),
                   repeatForever: true,

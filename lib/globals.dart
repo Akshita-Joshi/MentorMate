@@ -41,6 +41,7 @@ TextEditingController fyControllerT = TextEditingController();
 TextEditingController syControllerT = TextEditingController();
 TextEditingController tyControllerT = TextEditingController();
 TextEditingController btechControllerT = TextEditingController();
+TextEditingController seqControllerT = TextEditingController();
 
 String? currentUser;
 String? currentYear;

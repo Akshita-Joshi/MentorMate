@@ -23,15 +23,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    isUserLoggedIn();
+    //isUserLoggedIn();
     _loadWidget();
-  }
-
-  Future<bool> isUserLoggedIn() async {
-    setState(() async {
-      userMap = await auth.currentUser as Map<String, dynamic>;
-    });
-    return userMap != null;
   }
 
   _loadWidget() async {
