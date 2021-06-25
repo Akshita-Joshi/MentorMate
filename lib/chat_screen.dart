@@ -26,6 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     const String _heroAddTodo = 'add-todo-hero';
+    const String _heroDoubt = 'doubt';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -48,9 +49,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   child: Center(child: SvgPicture.asset('assets/back.svg')))),
           title: Text(
             widget.userMap!['name'],
+            maxLines: 2,
             style: TextStyle(
                 fontFamily: "MontserratB",
-                fontSize: width * 0.0611, //24
+                fontSize: 18, //24
                 color: Colors.black),
           ),
           actions: [
@@ -63,7 +65,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   InkWell(
                     onTap: () {
                       setState(() {
-                        type = 'doubt';
+                        type = _heroDoubt;
                         Drawerclass.showMenu = true;
                       });
                     },
@@ -83,28 +85,23 @@ class _ChatScreenState extends State<ChatScreen> {
                           return MeetRequestPopupCard();
                         }));
                       },
-                      child:
-                          /*Container(
-                        height: width * 0.152, //60
-                        child:
-                            Center(child: SvgPicture.asset('assets/meet.svg'))),*/
-                          Hero(
-                              tag: _heroAddTodo,
-                              createRectTween: (begin, end) {
-                                return CustomRectTween(begin: begin, end: end);
-                              },
-                              child: Material(
-                                color: Colors.white,
-                                elevation: 0,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                child: Container(
-                                    height: height * 0.07, //60
-                                    width: width * 0.152, //60
-                                    child: Center(
-                                        child: SvgPicture.asset(
-                                            'assets/meet.svg'))),
-                              )))
+                      child: Hero(
+                          tag: _heroAddTodo,
+                          createRectTween: (begin, end) {
+                            return CustomRectTween(begin: begin, end: end);
+                          },
+                          child: Material(
+                            color: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Container(
+                                height: height * 0.07, //60
+                                width: width * 0.152, //60
+                                child: Center(
+                                    child:
+                                        SvgPicture.asset('assets/meet.svg'))),
+                          )))
                 ],
               ),
             )
@@ -131,7 +128,6 @@ class _ChatScreenState extends State<ChatScreen> {
                           return ListView.builder(
                               physics: BouncingScrollPhysics(),
                               itemCount: snapshot.data!.docs.length,
-                              reverse: true,
                               itemBuilder: (BuildContext context, index) {
                                 DocumentSnapshot document =
                                     snapshot.data!.docs[index];

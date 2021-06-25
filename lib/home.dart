@@ -231,14 +231,9 @@ class _StudentHomeState extends State<StudentHome> {
                                         )));
                               },
                               child: Container(
-                                  child: Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: height * 0.014,
-                                    top: height * 0.014), //12 12
-                                child: Text(
-                                  map['${widget.userMap['year']}'].toString(),
-                                  style: _textStyle(),
-                                ),
+                                  child: Text(
+                                map['${widget.userMap['year']}'].toString(),
+                                style: _textStyle(),
                               )),
                             );
                           },
