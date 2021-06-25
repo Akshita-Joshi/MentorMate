@@ -24,35 +24,8 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final TextEditingController _messagetitle = TextEditingController();
-  final TextEditingController _message = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  List<Messages> _msgs = [
-    Messages(
-        from: "receiver",
-        message:
-            "It's very simple, just change your settings in your IDE regarding declaration and it will work",
-        time: '9:36 AM',
-        type: 'chat'),
-    Messages(from: "sender", message: "..", time: '9:31 AM', type: 'chat'),
-    Messages(
-        from: "sender", message: "Okay ma'am", time: '9:31 AM', type: 'chat'),
-    Messages(
-        from: "receiver",
-        message: "Lets schedule a meet at 5:30 pm",
-        time: '9:30 AM',
-        type: 'chat'),
-    Messages(
-        from: "receiver",
-        message: "null",
-        time: '9:30 AM',
-        type: 'doubt',
-        title: 'What are classes in CPP ?',
-        description:
-            'Good evening ma’am , I was trying to make a class in cpp but the compiler is showing error everytime. '),
-  ];
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -60,7 +33,6 @@ class _ChatScreenState extends State<ChatScreen> {
     const String _heroAddTodo = 'add-todo-hero';
 
     return Scaffold(
-      //resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * 0.082), //70
@@ -80,7 +52,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       BoxDecoration(borderRadius: BorderRadius.circular(20)),
                   child: Center(child: SvgPicture.asset('assets/back.svg')))),
           title: Text(
-            "Teacher",
+            widget.userMap!['name'],
             style: TextStyle(
                 fontFamily: "MontserratB",
                 fontSize: width * 0.0611, //24
@@ -174,28 +146,33 @@ class _ChatScreenState extends State<ChatScreen> {
                                 Map<String, dynamic> map =
                                     snapshot.data!.docs[index].data()
                                         as Map<String, dynamic>;
-                                return map['type'] == 'message'
-                                    ? Message(
-                                        map: map,
-                                      )
-                                    : InkWell(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              HeroDialogRoute(
-                                                  builder: (context) {
-                                            return DoubtSolvedPopup(
-                                                doubtid: document.id,
-                                                id: widget.chatRoomId!,
-                                                map: map);
-                                          }));
-                                        },
-                                        child: Hero(
-                                            tag: 'doubt',
-                                            createRectTween: (begin, end) {
-                                              return CustomRectTween(
-                                                  begin: begin, end: end);
-                                            },
-                                            child: DoubtMessage(map: map)));
+                                if (map['type'] == 'link') {
+                                  return MeetCard();
+                                } else {
+                                  return map['type'] == 'message'
+                                      ? Message(
+                                          check: 'student',
+                                          map: map,
+                                        )
+                                      : InkWell(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                                HeroDialogRoute(
+                                                    builder: (context) {
+                                              return DoubtSolvedPopup(
+                                                  doubtid: document.id,
+                                                  id: widget.chatRoomId!,
+                                                  map: map);
+                                            }));
+                                          },
+                                          child: Hero(
+                                              tag: 'doubt',
+                                              createRectTween: (begin, end) {
+                                                return CustomRectTween(
+                                                    begin: begin, end: end);
+                                              },
+                                              child: DoubtMessage(map: map)));
+                                }
                               });
                         } else {
                           return Container();
@@ -217,7 +194,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
 class Message extends StatefulWidget {
   Map<String, dynamic> map;
-  Message({required this.map});
+  String check;
+  Message({required this.map, required this.check});
   @override
   _MessageState createState() => _MessageState();
 }
@@ -232,7 +210,7 @@ class _MessageState extends State<Message> {
       padding: EdgeInsets.symmetric(
           horizontal: width * 0.061, vertical: height * 0.009), //24 8
       child: Container(
-        alignment: widget.map['sendby'] == auth.currentUser!.displayName
+        alignment: widget.map['sendby'] == widget.check
             ? Alignment.topRight
             : Alignment.topLeft,
         child: Container(
@@ -438,30 +416,25 @@ class MeetCard extends StatefulWidget {
 }
 
 class _MeetCardState extends State<MeetCard> {
-  
   @override
   Widget build(BuildContext context) {
-     double height = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return InkWell(
-    onTap: ()async{
-    
- 
-  const url = "https://meet.google.com/wax-ncmq-eim";
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
-  }
-}
-    ,
-          child: Padding(
+      onTap: () async {
+        const url = "https://meet.google.com/wax-ncmq-eim";
+        if (await canLaunch(url)) {
+          await launch(url);
+        } else {
+          throw 'Could not launch $url';
+        }
+      },
+      child: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: width * 0.061, vertical: height * 0.009), //24 8
         child: Container(
-          
           child: Container(
-           //280 100
+            //280 100
             decoration: BoxDecoration(
                 color: grey, borderRadius: BorderRadius.circular(10)),
             child: Padding(
@@ -471,18 +444,16 @@ class _MeetCardState extends State<MeetCard> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('This is your meeting link'
-                  
-                  ,
+                  Text('This is your meeting link',
                       style: TextStyle(
                           fontFamily: "MontserratM",
                           fontSize: 16, //18
                           color: Colors.black)),
-                  SizedBox(height:8), //8
+                  SizedBox(height: 8), //8
                   Text(meetlink!,
                       style: TextStyle(
                           fontFamily: "MontserratM",
-                          fontSize:18, //10
+                          fontSize: 18, //10
                           color: Colors.black))
                 ],
               ),

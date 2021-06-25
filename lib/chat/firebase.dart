@@ -31,17 +31,28 @@ void getUser() async {
 
 void onSendMessage() async {
   var user;
-  await _firestore
-      .collection("users")
-      .doc(auth.currentUser!.uid)
-      .get()
-      .then((value) {
-    print(value.data());
-    print(value.data()!['name']);
-    currentUser = value.data()!['name'];
-    user = value.data();
-    
-  });
+  print('--this is role-------$role');
+  role == 'student'
+      ? await _firestore
+          .collection("users")
+          .doc(auth.currentUser!.uid)
+          .get()
+          .then((value) {
+          print(value.data());
+          print(value.data()!['name']);
+          currentUser = value.data()!['name'];
+          user = value.data();
+        })
+      : await _firestore
+          .collection("teachers")
+          .doc(auth.currentUser!.uid)
+          .get()
+          .then((value) {
+          print(value.data());
+          print(value.data()!['name']);
+          currentUser = value.data()!['name'];
+          user = value.data();
+        });
 
   if (message.text.isNotEmpty || messageTitle.text.isNotEmpty) {
     print(message.text);
@@ -49,7 +60,14 @@ void onSendMessage() async {
     print('this is user data inside doubts----------------------------------');
     print(user['name']);
     if (message.text.isNotEmpty) {
-      type = 'message';
+      if (message.text == "https://meet.google.com/wax-ncmq-eim") {
+                print(message.text);
+
+        type = 'link';
+      } else {
+        type = 'message';
+        print(message.text);
+      }
     } else if (messageTitle.text.isNotEmpty) {
       type = 'doubt';
     }
@@ -67,7 +85,6 @@ void onSendMessage() async {
       'studentKey':
           '${user['year']} ${user['branch']} ${user['div']} ${user['roll']}',
       'image_url': imageUrl
-          
     };
     message.clear();
     messageTitle.clear();
@@ -95,42 +112,36 @@ void addDoubts(Map<String, dynamic> doubtmessage) async {
 }
 
 void uploadImage() async {
-    final _storage = FirebaseStorage.instance;
-    final _picker = ImagePicker();
-    PickedFile image;
+  final _storage = FirebaseStorage.instance;
+  final _picker = ImagePicker();
+  PickedFile image;
 
+  //Check Permissions
+  await Permission.photos.request();
 
-    //Check Permissions
-    await Permission.photos.request();
+  var permissionStatus = await Permission.photos.status;
 
-    var permissionStatus = await Permission.photos.status;
+  if (permissionStatus.isGranted) {
+    //Select Image
+    image = (await _picker.getImage(source: ImageSource.gallery))!;
+    var file = File(image.path);
 
-    if (permissionStatus.isGranted){
-      //Select Image
-      image = (await _picker.getImage(source: ImageSource.gallery))!;
-      var file = File(image.path);
+    if (image != null) {
+      //Upload to Firebase
+      var snapshot = await _storage
+          .ref()
+          .child('folderName/imageName')
+          .putFile(file)
+          .whenComplete(() {});
 
-      if (image != null){
-        //Upload to Firebase
-        var snapshot = await _storage.ref()
-        .child('folderName/imageName')
-        .putFile(file).whenComplete(() {});
+      var downloadUrl = await snapshot.ref.getDownloadURL();
 
-        var downloadUrl = await snapshot.ref.getDownloadURL();
-
-     
-          imageUrl = downloadUrl;
-          print(imageUrl);
-        
-      } else {
-        print('No Path Received');
-      }
-
+      imageUrl = downloadUrl;
+      print(imageUrl);
     } else {
-      print('Grant Permissions and try again');
+      print('No Path Received');
     }
-
-    
-
-    
+  } else {
+    print('Grant Permissions and try again');
   }
+}
