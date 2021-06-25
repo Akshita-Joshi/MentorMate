@@ -192,34 +192,39 @@ class _BottomDrawerState extends State<BottomDrawer> {
                                 },
                               ),
                               SizedBox(height: height * 0.035), //30
-                              Container(
-                                  width: width,
-                                  decoration: BoxDecoration(
-                                      color: grey,
-                                      borderRadius: BorderRadius.circular(6)),
-                                  child: Center(
-                                      child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: width * 0.03,
-                                        vertical: height * 0.014), //12 12
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          height: height * 0.018, //16
-                                          child: SvgPicture.asset(
-                                              'assets/paperclip.svg'),
-                                        ),
-                                        SizedBox(width: width * 0.020), //8
-                                        Text("Attach image",
-                                            style: TextStyle(
-                                                fontFamily: "Montserrat",
-                                                fontSize: width * 0.03, //12
-                                                color: Colors.black))
-                                      ],
-                                    ),
-                                  ))),
+                              InkWell(
+                                onTap: () {
+                                  uploadImage();
+                                },
+                                child: Container(
+                                    width: width,
+                                    decoration: BoxDecoration(
+                                        color: grey,
+                                        borderRadius: BorderRadius.circular(6)),
+                                    child: Center(
+                                        child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: width * 0.03,
+                                          vertical: height * 0.014), //12 12
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            height: height * 0.018, //16
+                                            child: SvgPicture.asset(
+                                                'assets/paperclip.svg'),
+                                          ),
+                                          SizedBox(width: width * 0.020), //8
+                                          Text("Attach image",
+                                              style: TextStyle(
+                                                  fontFamily: "Montserrat",
+                                                  fontSize: width * 0.03, //12
+                                                  color: Colors.black))
+                                        ],
+                                      ),
+                                    ))),
+                              ),
                               SizedBox(height: height * 0.035), //30
                               InkWell(
                                 onTap: () {
@@ -244,7 +249,11 @@ class _BottomDrawerState extends State<BottomDrawer> {
                                     ),
                                   ),
                                 ),
-                              )
+                              ),
+
+                                 (imageUrl != null)
+                                ? Image.network(imageUrl!)
+                                   : Placeholder(fallbackHeight: 200.0,fallbackWidth: double.infinity),
                             ],
                           ),
                         )

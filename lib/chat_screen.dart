@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mentor_mate/chat/firebase.dart';
 import 'package:mentor_mate/components/bottom_drawer.dart';
 import 'package:mentor_mate/components/popup.dart';
 import 'package:mentor_mate/models/models.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'globals.dart';
 //this file has the chat screen
 
@@ -126,12 +131,15 @@ class _ChatScreenState extends State<ChatScreen> {
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)),
-                                child: Container(
-                                    height: height * 0.07, //60
-                                    width: width * 0.152, //60
-                                    child: Center(
-                                        child: SvgPicture.asset(
-                                            'assets/meet.svg'))),
+                                child: ElevatedButton(
+                                  onPressed: () {},
+                                  child: Container(
+                                      height: height * 0.07, //60
+                                      width: width * 0.152, //60
+                                      child: Center(
+                                          child: SvgPicture.asset(
+                                              'assets/meet.svg'))),
+                                ),
                               )))
                 ],
               ),
@@ -159,7 +167,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           return ListView.builder(
                               physics: BouncingScrollPhysics(),
                               itemCount: snapshot.data!.docs.length,
-                              reverse: true,
+                              reverse: false,
                               itemBuilder: (BuildContext context, index) {
                                 DocumentSnapshot document =
                                     snapshot.data!.docs[index];
@@ -338,6 +346,9 @@ class TextInput extends StatefulWidget {
 }
 
 class _TextInputState extends State<TextInput> {
+  File? _image;
+  final _picker = ImagePicker();
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -358,9 +369,14 @@ class _TextInputState extends State<TextInput> {
             //crossAxisAlignment: CrossAxisAlignment.baseline,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                height: height * 0.028, //24
-                child: SvgPicture.asset('assets/paperclip.svg'),
+              ElevatedButton(
+                onPressed: () {
+                  uploadImage();
+                },
+                child: Container(
+                  height: height * 0.028, //24
+                  child: SvgPicture.asset('assets/paperclip.svg'),
+                ),
               ),
               SizedBox(
                 width: width * 0.025, //10
@@ -407,6 +423,70 @@ class _TextInputState extends State<TextInput> {
                 ),
               )
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MeetCard extends StatefulWidget {
+  const MeetCard({Key? key}) : super(key: key);
+
+  @override
+  _MeetCardState createState() => _MeetCardState();
+}
+
+class _MeetCardState extends State<MeetCard> {
+  
+  @override
+  Widget build(BuildContext context) {
+     double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    return InkWell(
+    onTap: ()async{
+    
+ 
+  const url = "https://meet.google.com/wax-ncmq-eim";
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+    ,
+          child: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: width * 0.061, vertical: height * 0.009), //24 8
+        child: Container(
+          
+          child: Container(
+           //280 100
+            decoration: BoxDecoration(
+                color: grey, borderRadius: BorderRadius.circular(10)),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: width * 0.04, vertical: height * 0.018), //16 16
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('This is your meeting link'
+                  
+                  ,
+                      style: TextStyle(
+                          fontFamily: "MontserratM",
+                          fontSize: 16, //18
+                          color: Colors.black)),
+                  SizedBox(height:8), //8
+                  Text(meetlink!,
+                      style: TextStyle(
+                          fontFamily: "MontserratM",
+                          fontSize:18, //10
+                          color: Colors.black))
+                ],
+              ),
+            ),
           ),
         ),
       ),

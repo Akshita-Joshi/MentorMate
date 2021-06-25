@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/chat/firebase.dart';
 import 'package:mentor_mate/chat_screen.dart';
 
+
 class Doubts extends StatefulWidget {
   Map<String, dynamic> map;
   Map<String, dynamic> teacherMap;
@@ -109,6 +110,9 @@ class _DoubtsState extends State<Doubts> {
                       fontSize: width * 0.035, //14
                       color: Colors.black.withOpacity(0.3))),
             ),
+                (widget.map['image_url'] != null)
+            ? Image.network(widget.map['image_url']!)
+            : Container(height: 0,),
             Padding(
               padding: EdgeInsets.only(
                   left: width * 0.05, top: height * 0.011), //20 10
@@ -123,6 +127,7 @@ class _DoubtsState extends State<Doubts> {
                             userMap: widget.map,
                           )));
                 },
+               
                 child: Container(
                   height: height * 0.047, //40
                   width: width * 0.254, //100
