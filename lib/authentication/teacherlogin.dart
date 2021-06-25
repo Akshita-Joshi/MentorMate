@@ -16,6 +16,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
   double syOpacity = 0.0;
   double tyOpacity = 0.0;
   double btechOpacity = 0.0;
+  double seqOpacity = 0.0;
 
   static TextStyle _hintText() {
     return TextStyle(
@@ -126,6 +127,49 @@ class _TeacherLoginState extends State<TeacherLogin> {
                     //crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       //--------------------------------
+                      _label(seqOpacity, "Sequence No."),
+                      TextFormField(
+                        controller: seqControllerT,
+                        style: _inputText(),
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            errorBorder: InputBorder.none,
+                            disabledBorder: InputBorder.none,
+                            hintStyle: _hintText(),
+                            hintText: "Enter 8 digit Sequence no."),
+                        onChanged: (value) {
+                          setState(() {
+                            value != '' ? seqOpacity = 1 : seqOpacity = 0;
+                          });
+                        },
+                        onFieldSubmitted: (value) {
+                          var myList = [
+                            '83895123',
+                            '39128123',
+                            '63385123',
+                            '05250123',
+                            '49709123'
+                          ];
+                          var element = seqControllerT.text;
+                          var present = false;
+                          for (var i = 0; i < myList.length; i++) {
+                            if (element == myList[i]) {
+                              present = true;
+                              break;
+                            }
+                          }
+                          if (present) {
+                            print('$element is present in the list $myList');
+                          } else {
+                            print(
+                                '$element is not present in the list $myList');
+                          }
+                        },
+                        //_callOnTop();
+                      ),
+                      SizedBox(height: height * 0.011), //10
                       _label(nameOpacity, "Name"),
                       TextFormField(
                         controller: nameControllerT,
