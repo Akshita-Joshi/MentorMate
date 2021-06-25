@@ -1,7 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:mentor_mate/chat/firebase.dart';
+import 'package:mentor_mate/chat_screen.dart';
 
 class Doubts extends StatefulWidget {
+  Map<String, dynamic> map;
+  Map<String, dynamic> teacherMap;
+  Doubts({required this.map, required this.teacherMap});
   @override
   _DoubtsState createState() => _DoubtsState();
 }
@@ -28,7 +34,7 @@ class _DoubtsState extends State<Doubts> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      'Durgesh Kudalkar',
+                      widget.map['name'],
                       style: TextStyle(
                           fontFamily: "MontserratM",
                           fontSize: width * 0.035, //14
@@ -54,7 +60,7 @@ class _DoubtsState extends State<Doubts> {
                   top: 2,
                   bottom: height * 0.011), // 20 2 10
               child: Text(
-                'CSE A 53',
+                widget.map['studentKey'],
                 style: TextStyle(
                     fontFamily: "MontserratM",
                     fontSize: width * 0.04, //16
@@ -73,7 +79,7 @@ class _DoubtsState extends State<Doubts> {
                     ),
                   ),
                 ),
-                Text('What are classes in CPP ?',
+                Text(widget.map['title'],
                     style: TextStyle(
                       fontFamily: "MontserratSB",
                       fontSize: width * 0.061, //24
@@ -87,7 +93,7 @@ class _DoubtsState extends State<Doubts> {
                   top: height * 0.011,
                   bottom: height * 0.011), //20 10 10
               child: Text(
-                'Good evening ma’am , I was trying to make a class in cpp but the compiler is showing error everytime. ',
+                widget.map['description'],
                 style: TextStyle(
                     fontFamily: "Montserrat",
                     fontSize: width * 0.045, //18
@@ -97,7 +103,7 @@ class _DoubtsState extends State<Doubts> {
             Padding(
               padding: EdgeInsets.only(
                   left: width * 0.05, top: height * 0.009), //20 8
-              child: Text("9:30 AM",
+              child: Text(widget.map['time'],
                   style: TextStyle(
                       fontFamily: "MontserratM",
                       fontSize: width * 0.035, //14
@@ -106,21 +112,33 @@ class _DoubtsState extends State<Doubts> {
             Padding(
               padding: EdgeInsets.only(
                   left: width * 0.05, top: height * 0.011), //20 10
-              child: Container(
-                height: height * 0.047, //40
-                width: width * 0.254, //100
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: grey,
-                ),
-                //border: Border.all(width: 1)),
-                child: Center(
-                  child: Text('Reply',
-                      style: TextStyle(
-                        fontFamily: "MontserratM",
-                        fontSize: width * 0.037, //15
-                        color: Colors.black,
-                      )),
+              child: InkWell(
+                onTap: () {
+                  String roomId2 =
+                      chatRoomId(widget.teacherMap['name'], widget.map['name']);
+
+                  Navigator.of(context).push(CupertinoPageRoute(
+                      builder: (_) => ChatScreen(
+                            chatRoomId: roomId2,
+                            userMap: widget.map,
+                          )));
+                },
+                child: Container(
+                  height: height * 0.047, //40
+                  width: width * 0.254, //100
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: grey,
+                  ),
+                  //border: Border.all(width: 1)),
+                  child: Center(
+                    child: Text('Reply',
+                        style: TextStyle(
+                          fontFamily: "MontserratM",
+                          fontSize: width * 0.037, //15
+                          color: Colors.black,
+                        )),
+                  ),
                 ),
               ),
             ),

@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/authentication/authenticate.dart';
+import 'package:mentor_mate/authentication/login.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/home.dart';
 
@@ -306,7 +307,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TeacherHome(),
+                          builder: (context) => Login(),
                         ));
                   },
                   animatedTexts: [

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/authentication/authenticate.dart';
 import 'package:mentor_mate/authentication/login.dart';
 import 'package:mentor_mate/authentication/register.dart';
+import 'package:mentor_mate/authentication/teacherlogin.dart';
 import 'package:mentor_mate/components/loader.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/home.dart';
@@ -211,8 +212,18 @@ class _SignUpState extends State<SignUp> {
                           setState(() {
                             isLoading = false;
                           });
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => Register()));
+                          role == 'student'
+                              ? Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Register(),
+                                  ))
+                              : Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TeacherLogin(),
+                                  ));
+
                           print("Account Created Sucessful");
                         } else {
                           print("Login Failed");

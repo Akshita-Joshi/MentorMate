@@ -6,7 +6,7 @@ import 'package:mentor_mate/components/loader.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/home.dart';
 
-class Authenticate extends StatelessWidget {
+/*class Authenticate extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
@@ -17,7 +17,7 @@ class Authenticate extends StatelessWidget {
       return Login();
     }
   }
-}
+}*/
 
 Future<User?> createAccount(String email, String password) async {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -106,14 +106,8 @@ void addUserData() async {
 }
 
 void addTeacher() async {
-  if (nameController.text.isNotEmpty &&
-      branchController.text.isNotEmpty &&
-      divController.text.isNotEmpty &&
-      yearController.text.isNotEmpty &&
-      rollController.text.isNotEmpty) {
-    print(message.text);
-
-    Map<String, dynamic> userData = {
+  if (nameControllerT.text.isNotEmpty && role!.isNotEmpty) {
+    Map<String, dynamic> teacherData = {
       'email': email.text,
       "name": nameControllerT.text,
       'FY': fyControllerT.text,
@@ -124,9 +118,9 @@ void addTeacher() async {
     };
 
     await _firestore
-        .collection('users')
+        .collection('teachers')
         .doc(_auth.currentUser!.uid)
-        .set(userData);
+        .set(teacherData);
   } else {
     print('Enter Some Text');
   }

@@ -12,6 +12,8 @@ import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/models/models.dart';
 
 class StudentHome extends StatefulWidget {
+  Map<String, dynamic> userMap;
+  StudentHome({required this.userMap});
   @override
   _StudentHomeState createState() => _StudentHomeState();
 }
@@ -27,9 +29,26 @@ class _StudentHomeState extends State<StudentHome> {
 
   List<Widget> _subTiles = [];
 
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String? currentNameDisplay;
+
   @override
   void initState() {
     super.initState();
+    getUser();
+    _firestore
+        .collection("users")
+        .doc(auth.currentUser!.uid)
+        .get()
+        .then((value) {
+      print(value.data());
+      print(value.data()!['name']);
+      currentUser = value.data()!['name'];
+      setState(() {
+        currentNameDisplay = value.data()!['name'];
+      });
+    });
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _addSubs();
     });
@@ -58,18 +77,6 @@ class _StudentHomeState extends State<StudentHome> {
 
   //Map<String, dynamic>? userMap;
   var collectionss;
-  bool _isloading = false;
-  final TextEditingController _search = TextEditingController();
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  /*String chatRoomId(String user1, String user2) {
-    if (user1[0].toLowerCase().codeUnits[0] >
-        user2.toLowerCase().codeUnits[0]) {
-      return "$user1$user2";
-    } else {
-      return "$user2$user1";
-    }
-  }*/
 
   void displayuserss() async {
     var documents = await _firestore.collection('users').get();
@@ -83,14 +90,14 @@ class _StudentHomeState extends State<StudentHome> {
       radius: 320,
       splashColor: Colors.black.withOpacity(0.2),
       onTap: () {
-        String roomId =
-            chatRoomId(_auth.currentUser!.displayName!, userMap?['name']);
+        /*String roomId =
+            chatRoomId(_auth.currentUser!.displayName!, userMap?['name']);*/
 
-        Navigator.of(context).push(MaterialPageRoute(
+        /*Navigator.of(context).push(MaterialPageRoute(
             builder: (_) => DoubtScreen(
                   chatRoomId: roomId,
                   userMap: userMap,
-                )));
+                )));*/
         /*Navigator.push(
             context,
             CupertinoPageRoute(
@@ -147,7 +154,7 @@ class _StudentHomeState extends State<StudentHome> {
                   ),
                 ),
                 Text(
-                  "Durgesh Kudalkar",
+                  widget.userMap['name'],
                   style: TextStyle(
                     fontFamily: "MontserratT",
                     fontSize: width * 0.076, //30
@@ -170,7 +177,7 @@ class _StudentHomeState extends State<StudentHome> {
                       }),*/
                         StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
-                      .collection('users')
+                      .collection('teachers')
                       .snapshots(),
                   builder: (ctx, AsyncSnapshot<QuerySnapshot> usersnapshot) {
                     if (usersnapshot.connectionState ==
@@ -184,43 +191,54 @@ class _StudentHomeState extends State<StudentHome> {
                           itemBuilder: (context, index) {
                             DocumentSnapshot document =
                                 usersnapshot.data!.docs[index];
-                            if (document.id == _auth.currentUser?.uid) {
+                            var currentName;
+                            var currentYear;
+
+                            _firestore
+                                .collection("users")
+                                .doc(auth.currentUser!.uid)
+                                .get()
+                                .then((value) {
+                              print(value.data());
+                              print(value.data()!['name']);
+                              print(value.data()!['year']);
+                              currentName = value.data()!['name'];
+                              currentYear = value.data()!['year'];
+                            });
+
+                            Map<String, dynamic> map =
+                                usersnapshot.data!.docs[index].data()
+                                    as Map<String, dynamic>;
+                            if (document.id == auth.currentUser?.uid) {
                               collectionss = document.data().toString();
                               return Container(height: 0);
                             }
                             return InkWell(
+                              radius: 320,
+                              splashColor: Colors.black.withOpacity(0.2),
                               onTap: () {
-                                print("this is auth user");
-                                print(_auth.currentUser);
-                                print("this is usemap");
-                                setState(() {
-                                  userMap =
-                                      document.data() as Map<String, dynamic>?;
-                                });
-                                print(userMap?['name']);
-                                String roomId1 = chatRoomId(
-                                    _auth.currentUser!.displayName!,
-                                    userMap?['name']);
+                                String roomId1 =
+                                    chatRoomId(currentName, map['name']);
                                 setState(() {
                                   roomId = roomId1;
                                 });
 
-                                Navigator.of(context).push(MaterialPageRoute(
+                                Navigator.of(context).push(CupertinoPageRoute(
                                     builder: (_) => ChatScreen(
                                           chatRoomId: roomId1,
-                                          userMap: userMap,
+                                          userMap: map,
                                         )));
                               },
                               child: Container(
-                                  child: Text(document
-                                      .data()
-                                      .toString()
-                                      .substring(
-                                          6,
-                                          document
-                                              .data()
-                                              .toString()
-                                              .indexOf(',')))),
+                                  child: Padding(
+                                padding: EdgeInsets.only(
+                                    bottom: height * 0.014,
+                                    top: height * 0.014), //12 12
+                                child: Text(
+                                  map['${widget.userMap['year']}'].toString(),
+                                  style: _textStyle(),
+                                ),
+                              )),
                             );
                           },
                         ),
@@ -251,6 +269,8 @@ class _StudentHomeState extends State<StudentHome> {
 }
 
 class TeacherHome extends StatefulWidget {
+  Map<String, dynamic> teacherMap;
+  TeacherHome({required this.teacherMap});
   @override
   _TeacherHomeState createState() => _TeacherHomeState();
 }
@@ -326,15 +346,15 @@ class _TeacherHomeState extends State<TeacherHome>
           TabBarView(
             controller: _controller,
             children: [
-              DoubtPage(),
-              DoubtPage(),
-              DoubtPage(),
-              DoubtPage(),
+              DoubtPage(checkYear: "FY", teacherMap: widget.teacherMap),
+              DoubtPage(checkYear: "SY", teacherMap: widget.teacherMap),
+              DoubtPage(checkYear: "TY", teacherMap: widget.teacherMap),
+              DoubtPage(checkYear: "BTech", teacherMap: widget.teacherMap),
             ],
           ),
-          Positioned(
+          /*Positioned(
               top: height! * 0.082, //70
-              child: RequestList())
+              child: RequestList())*/
         ]),
       ),
     );

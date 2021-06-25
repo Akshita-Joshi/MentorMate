@@ -23,28 +23,6 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _message = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  void onSendMessage() async {
-    if (_message.text.isNotEmpty) {
-      print(_message.text);
-      Map<String, dynamic> messages = {
-        "sendby": _auth.currentUser?.displayName,
-        "message": _message.text,
-        'title': _messagetitle,
-        "time": FieldValue.serverTimestamp(),
-      };
-      message.clear();
-
-      await _firestore
-          .collection('chatroom')
-          .doc(widget.chatRoomId)
-          .collection('chats')
-          .doc(widget.chatRoomId)
-          .collection('doubts')
-          .add(messages);
-    } else {
-      print('Enter Some Text');
-    }
-  }
 
   List<Messages> _msgs = [
     Messages(
