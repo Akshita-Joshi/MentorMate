@@ -251,3 +251,82 @@ class _DoubtSolvedPopupState extends State<DoubtSolvedPopup> {
     );
   }
 }
+
+class MeetAcceptPopupCard extends StatefulWidget {
+  @override
+  _MeetAcceptPopupCardState createState() => _MeetAcceptPopupCardState();
+}
+
+class _MeetAcceptPopupCardState extends State<MeetAcceptPopupCard> {
+  /// {@macro add_todo_popup_card}
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32.0),
+        child: Hero(
+          tag: _heroAddTodo,
+          createRectTween: (begin, end) {
+            return CustomRectTween(begin: begin, end: end);
+          },
+          child: Material(
+            color: Colors.white,
+            elevation: 0,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 18.0),
+                      child: Container(
+                          height: 70,
+                          child: Center(
+                              child: SvgPicture.asset(
+                            'assets/meet.svg',
+                            height: 40,
+                          ))),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 30.0),
+                      child: Container(
+                          width: 200,
+                          child: Text(
+                            'Send meet invite?',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontFamily: 'MontserratM', fontSize: 20),
+                          )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 28.0),
+                      child: Divider(
+                        thickness: 0.2,
+                        color: Colors.black,
+                      ),
+                    ),
+                    FlatButton(
+                      onPressed: () {},
+                      child: const Text(
+                        'Yes',
+                        style:
+                            TextStyle(fontFamily: 'MontserratB', fontSize: 18),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

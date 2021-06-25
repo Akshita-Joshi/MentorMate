@@ -209,10 +209,6 @@ class _LoginState extends State<Login> {
                                       'Please wait while we \nlog you in..',
                                 )));
                     if (_email.text.isNotEmpty && _password.text.isNotEmpty) {
-                      setState(() {
-                        isLoading = true;
-                      });
-
                       logIn(_email.text, _password.text).then((user) async {
                         if (user != null) {
                           getUser();

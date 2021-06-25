@@ -26,16 +26,28 @@ void getUser() async {
 
 void onSendMessage() async {
   var user;
-  await _firestore
-      .collection("users")
-      .doc(auth.currentUser!.uid)
-      .get()
-      .then((value) {
-    print(value.data());
-    print(value.data()!['name']);
-    currentUser = value.data()!['name'];
-    user = value.data();
-  });
+  print('--this is role-------$role');
+  role == 'student'
+      ? await _firestore
+          .collection("users")
+          .doc(auth.currentUser!.uid)
+          .get()
+          .then((value) {
+          print(value.data());
+          print(value.data()!['name']);
+          currentUser = value.data()!['name'];
+          user = value.data();
+        })
+      : await _firestore
+          .collection("teachers")
+          .doc(auth.currentUser!.uid)
+          .get()
+          .then((value) {
+          print(value.data());
+          print(value.data()!['name']);
+          currentUser = value.data()!['name'];
+          user = value.data();
+        });
 
   if (message.text.isNotEmpty || messageTitle.text.isNotEmpty) {
     print(message.text);

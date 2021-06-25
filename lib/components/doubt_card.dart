@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/chat/firebase.dart';
 import 'package:mentor_mate/chat_screen.dart';
+import 'package:mentor_mate/globals.dart';
+import 'package:mentor_mate/teacher_chat_screen.dart';
 
 class Doubts extends StatefulWidget {
   Map<String, dynamic> map;
@@ -116,9 +118,13 @@ class _DoubtsState extends State<Doubts> {
                 onTap: () {
                   String roomId2 =
                       chatRoomId(widget.teacherMap['name'], widget.map['name']);
+                  setState(() {
+                    roomId = roomId2;
+                    to = widget.map['name'];
+                  });
 
                   Navigator.of(context).push(CupertinoPageRoute(
-                      builder: (_) => ChatScreen(
+                      builder: (_) => TeacherChatScreen(
                             chatRoomId: roomId2,
                             userMap: widget.map,
                           )));
