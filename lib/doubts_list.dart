@@ -31,7 +31,8 @@ class _DoubtPageState extends State<DoubtPage> {
                       print(map);
                       return map['type'] == 'doubt' &&
                               map['studentKey'].toString().substring(0, 2) ==
-                                  widget.checkYear
+                                  widget.checkYear &&
+                              map['to'] == widget.teacherMap['name']
                           ? Doubts(
                               map: map,
                               teacherMap: widget.teacherMap,

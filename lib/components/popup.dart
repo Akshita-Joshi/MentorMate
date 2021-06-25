@@ -164,7 +164,10 @@ const String _heroDoubt = 'doubt';
 
 class DoubtSolvedPopup extends StatefulWidget {
   Map<String, dynamic> map;
-  DoubtSolvedPopup({required this.map});
+  String id;
+  String doubtid;
+  DoubtSolvedPopup(
+      {required this.map, required this.id, required this.doubtid});
   @override
   _DoubtSolvedPopupState createState() => _DoubtSolvedPopupState();
 }
@@ -219,12 +222,16 @@ class _DoubtSolvedPopupState extends State<DoubtSolvedPopup> {
                       onPressed: () {
                         setState(() {
                           widget.map['solved'] = true;
-                          /*FirebaseFirestore.instance
+                          var collRef = FirebaseFirestore.instance
                               .collection('chatroom')
-                              .doc(roomId)
+                              .doc(widget.id)
                               .collection('chats')
-                              .doc(roomId)
-                              .update({'solved': true});*/
+                              .doc(widget.id)
+                              .collection('doubts');
+                          DocumentReference docReference = collRef.doc();
+                          print('--------$docReference');
+                          docReference.update({'solved': true});
+                          print('-----------${docReference.get()}');
                         });
                         Navigator.pop(context);
                       },

@@ -50,6 +50,7 @@ void onSendMessage() async {
 
     Map<String, dynamic> messages = {
       "sendby": user['role'].toString(),
+      'to': to,
       'type': type,
       'description': messageDescription.text,
       'solved': false,

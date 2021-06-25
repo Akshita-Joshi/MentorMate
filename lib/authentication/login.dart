@@ -1,7 +1,9 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mentor_mate/authentication/authenticate.dart';
 import 'package:mentor_mate/chat/firebase.dart';
 import 'package:mentor_mate/components/loader.dart';
@@ -243,15 +245,23 @@ class _LoginState extends State<Login> {
                                 });
 
                           print("Login Successful");
+                          Fluttertoast.showToast(
+                              msg: 'Logged In successfully',
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: grey,
+                              textColor: Colors.black,
+                              fontSize: 16.0);
                           role == 'student'
                               ? Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                       builder: (_) =>
                                           StudentHome(userMap: userMap)))
                               : Navigator.push(
                                   context,
-                                  MaterialPageRoute(
+                                  CupertinoPageRoute(
                                       builder: (_) => TeacherHome(
                                             teacherMap: teacherMap,
                                           )));
@@ -260,8 +270,16 @@ class _LoginState extends State<Login> {
                           });
                         } else {
                           print("Login Failed");
+                          Fluttertoast.showToast(
+                              msg: 'Login Failed',
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: grey,
+                              textColor: Colors.black,
+                              fontSize: 16.0);
                           Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => Login()));
+                              CupertinoPageRoute(builder: (_) => Login()));
                           setState(() {
                             isLoading = false;
                           });

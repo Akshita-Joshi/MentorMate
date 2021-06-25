@@ -161,6 +161,8 @@ class _ChatScreenState extends State<ChatScreen> {
                               itemCount: snapshot.data!.docs.length,
                               reverse: true,
                               itemBuilder: (BuildContext context, index) {
+                                DocumentSnapshot document =
+                                    snapshot.data!.docs[index];
                                 Map<String, dynamic> map =
                                     snapshot.data!.docs[index].data()
                                         as Map<String, dynamic>;
@@ -173,7 +175,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                           Navigator.of(context).push(
                                               HeroDialogRoute(
                                                   builder: (context) {
-                                            return DoubtSolvedPopup(map: map);
+                                            return DoubtSolvedPopup(
+                                                doubtid: document.id,
+                                                id: widget.chatRoomId!,
+                                                map: map);
                                           }));
                                         },
                                         child: Hero(
@@ -183,20 +188,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                                   begin: begin, end: end);
                                             },
                                             child: DoubtMessage(map: map)));
-                                /*_msgs[index].type.toString() == 'chat'
-                                    ? Message(
-                                        from: _msgs[index].from.toString(),
-                                        message:
-                                            _msgs[index].message.toString(),
-                                        time: _msgs[index].time.toString(),
-                                        map: map,
-                                      )
-                                    : DoubtMessage(
-                                        title: _msgs[index].title.toString(),
-                                        description:
-                                            _msgs[index].description.toString(),
-                                        time: _msgs[index].time.toString(),
-                                      );*/
                               });
                         } else {
                           return Container();

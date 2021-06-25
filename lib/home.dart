@@ -221,6 +221,7 @@ class _StudentHomeState extends State<StudentHome> {
                                     chatRoomId(currentName, map['name']);
                                 setState(() {
                                   roomId = roomId1;
+                                  to = map['name'];
                                 });
 
                                 Navigator.of(context).push(CupertinoPageRoute(

@@ -1,4 +1,5 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/authentication/login.dart';
@@ -152,12 +153,12 @@ class _StudentorTeacherState extends State<StudentorTeacher> {
                         Authcheck.process == 'signup'
                             ? Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                CupertinoPageRoute(
                                   builder: (context) => SignUp(),
                                 ))
                             : Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                CupertinoPageRoute(
                                   builder: (context) => Login(),
                                 ));
                       },
@@ -196,12 +197,12 @@ class _StudentorTeacherState extends State<StudentorTeacher> {
                         Authcheck.process == 'signup'
                             ? Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                CupertinoPageRoute(
                                   builder: (context) => SignUp(),
                                 ))
                             : Navigator.push(
                                 context,
-                                MaterialPageRoute(
+                                CupertinoPageRoute(
                                   builder: (context) => Login(),
                                 ));
                       },

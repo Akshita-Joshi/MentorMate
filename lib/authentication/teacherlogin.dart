@@ -1,6 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mentor_mate/authentication/authenticate.dart';
 import 'package:mentor_mate/authentication/login.dart';
 import 'package:mentor_mate/globals.dart';
@@ -260,9 +262,17 @@ class _TeacherLoginState extends State<TeacherLogin> {
                   repeatForever: true,
                   onTap: () {
                     addTeacher();
+                    Fluttertoast.showToast(
+                        msg: 'Registered Successfully',
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: grey,
+                        textColor: Colors.black,
+                        fontSize: 16.0);
                     Navigator.push(
                         context,
-                        MaterialPageRoute(
+                        CupertinoPageRoute(
                           builder: (context) => Login(),
                         ));
                   },
