@@ -120,8 +120,10 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
                                     snapshot.data!.docs[index].data()
                                         as Map<String, dynamic>;
                                 if (map['type'] == 'link') {
+                                  print("This is link");
                                   return MeetCard();
                                 } else {
+                                  print("This is messageaa");
                                   return map['type'] == 'message'
                                       ? Message(
                                           check: 'teacher',
@@ -148,6 +150,7 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
                                 }
                               });
                         } else {
+                          print("Tjhis is empty container");
                           return Container();
                         }
                       })),

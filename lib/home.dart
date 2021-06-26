@@ -9,6 +9,7 @@ import 'package:mentor_mate/chat_screen.dart';
 import 'package:mentor_mate/components/request.dart';
 import 'package:mentor_mate/doubt_screen.dart';
 import 'package:mentor_mate/doubts_list.dart';
+import 'package:mentor_mate/forum.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/models/models.dart';
 
@@ -53,9 +54,9 @@ class _StudentHomeState extends State<StudentHome> {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _addSubs();
     });
-  }////
+  } ////
 // Future logOut(BuildContext context) async {
-  
+
 //   FirebaseAuth _auth = FirebaseAuth.instance;
 
 //   try {
@@ -272,7 +273,10 @@ class _StudentHomeState extends State<StudentHome> {
                       );
                     }
                   },
-                ))
+                )
+                
+                )
+                
               ],
             ),
           ),
@@ -291,7 +295,31 @@ class _StudentHomeState extends State<StudentHome> {
           ),
         ),
       ]),
-    );
+       floatingActionButton: Padding(
+            padding: const EdgeInsets.only(left: 26.0,bottom: 100),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Center(
+                    child: FloatingActionButton(
+                      child: Text("Forum",style: TextStyle(color: Colors.black),),
+                      backgroundColor: Colors.white,
+                      
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => FormDart(
+                                  teacherMap: widget.userMap,
+                                )));
+                  },
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                      side: BorderSide(color: Colors.white)),
+                )
+            )]
+       ),));
   }
 }
 
@@ -322,68 +350,104 @@ class _TeacherHomeState extends State<TeacherHome>
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(height! * 0.082), //70
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.white,
-            elevation: 0,
-            flexibleSpace: SafeArea(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: height! * 0.018, //16
-                  ),
-                  TabBar(
-                    indicatorColor: Colors.white,
-                    labelColor: Colors.black,
-                    unselectedLabelColor: Colors.black.withOpacity(0.3),
-                    labelStyle: TextStyle(
-                        fontFamily: "MontserratM",
-                        fontSize: width! * 0.040, //16
-                        color: Colors.black),
-                    unselectedLabelStyle: TextStyle(
-                        fontFamily: "MontserratM",
-                        fontSize: width! * 0.040, //16
-                        color: Colors.black.withOpacity(0.4)),
-                    controller: _controller,
-                    isScrollable: false,
-                    tabs: [
-                      Tab(
-                        text: 'FY BTech',
-                      ),
-                      Tab(
-                        text: 'SY BTech',
-                      ),
-                      Tab(
-                        text: 'TY BTech',
-                      ),
-                      Tab(
-                        text: 'BTech',
-                      ),
-                    ],
-                  ),
-                ],
+          backgroundColor: Colors.white,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(height! * 0.082), //70
+            child: AppBar(
+              actions: [
+                InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) =>
+                                  FormDart(teacherMap: widget.teacherMap)));
+                    },
+                    child: Text("forum"))
+              ],
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.white,
+              elevation: 0,
+              flexibleSpace: SafeArea(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: height! * 0.018, //16
+                    ),
+                    TabBar(
+                      indicatorColor: Colors.white,
+                      labelColor: Colors.black,
+                      unselectedLabelColor: Colors.black.withOpacity(0.3),
+                      labelStyle: TextStyle(
+                          fontFamily: "MontserratM",
+                          fontSize: width! * 0.040, //16
+                          color: Colors.black),
+                      unselectedLabelStyle: TextStyle(
+                          fontFamily: "MontserratM",
+                          fontSize: width! * 0.040, //16
+                          color: Colors.black.withOpacity(0.4)),
+                      controller: _controller,
+                      isScrollable: false,
+                      tabs: [
+                        Tab(
+                          text: 'FY BTech',
+                        ),
+                        Tab(
+                          text: 'SY BTech',
+                        ),
+                        Tab(
+                          text: 'TY BTech',
+                        ),
+                        Tab(
+                          text: 'BTech',
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        body: Stack(children: [
-          TabBarView(
-            controller: _controller,
-            children: [
-              DoubtPage(checkYear: "FY", teacherMap: widget.teacherMap),
-              DoubtPage(checkYear: "SY", teacherMap: widget.teacherMap),
-              DoubtPage(checkYear: "TY", teacherMap: widget.teacherMap),
-              DoubtPage(checkYear: "BTech", teacherMap: widget.teacherMap),
-            ],
+          body: Stack(children: [
+            TabBarView(
+              controller: _controller,
+              children: [
+                DoubtPage(checkYear: "FY", teacherMap: widget.teacherMap),
+                DoubtPage(checkYear: "SY", teacherMap: widget.teacherMap),
+                DoubtPage(checkYear: "TY", teacherMap: widget.teacherMap),
+                DoubtPage(checkYear: "BTech", teacherMap: widget.teacherMap),
+              ],
+            ),
+            // Positioned(
+            //     top: height! * 0.082, //70
+            //     child: RequestList(teacherMap: widget.teacherMap))
+          ]),
+          // floatingActionButton: Padding(
+          //   padding: const EdgeInsets.only(left: 26.0),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.center,
+          //     mainAxisAlignment: MainAxisAlignment.end,
+          //     children: [
+          //       Center(
+          //           child: FloatingActionButton(
+          //         onPressed: () {
+          //           Navigator.push(
+          //               context,
+          //               MaterialPageRoute(
+          //                   builder: (_) => FormDart(
+          //                         teacherMap: widget.teacherMap,
+          //                       )));
+          //         },
+          //         shape: RoundedRectangleBorder(
+          //             borderRadius: BorderRadius.circular(18),
+          //             side: BorderSide(color: Colors.white)),
+          //       )
+          //       ),
+          //     ],
+          //   ),
+          // )
+          
           ),
-          Positioned(
-              top: height! * 0.082, //70
-              child: RequestList(teacherMap: widget.teacherMap))
-        ]),
-      ),
     );
   }
 }

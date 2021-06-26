@@ -89,6 +89,7 @@ void onSendMessage() async {
     message.clear();
     messageTitle.clear();
     messageDescription.clear();
+    imageUrl = null;
     if (type == 'doubt') {
       addDoubts(messages);
     }

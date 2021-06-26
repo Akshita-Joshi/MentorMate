@@ -1,23 +1,96 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/chat/firebase.dart';
-import 'package:mentor_mate/chat_screen.dart';
+import 'package:mentor_mate/components/doubt_card.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/teacher_chat_screen.dart';
 
-class Doubts extends StatefulWidget {
-  Map<String, dynamic> map;
+class FormDart extends StatefulWidget {
   Map<String, dynamic> teacherMap;
-  Doubts({required this.map, required this.teacherMap});
+  FormDart({
+    required this.teacherMap,
+  });
   @override
-  _DoubtsState createState() => _DoubtsState();
+  _FormDartState createState() => _FormDartState();
 }
 
-class _DoubtsState extends State<Doubts> {
+class _FormDartState extends State<FormDart> {
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
+    print("This is form data");
+    return Scaffold(
+      
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text('Forum',style: TextStyle(color:Colors.black),),
+          elevation: 0,
+          backgroundColor: Colors.white,
+          leading: InkWell(
+              customBorder: new CircleBorder(),
+              splashColor: Colors.black.withOpacity(0.2),
+              onTap: () {
+                 print("This is form data");
+                Navigator.pop(context);
+              },
+              child: Container(
+                  height: height! * 0.035, //30
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                  child: Center(child: SvgPicture.asset('assets/back.svg')))),
+        ),
+        
+        body: Column(
+          children: [
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance.collection('doubts').snapshots(),
+              builder: (ctx, AsyncSnapshot<QuerySnapshot> usersnapshot) {
+                if (usersnapshot.connectionState == ConnectionState.waiting) {
+                  return Container(
+                      child: Center(child: CircularProgressIndicator()));
+                } else {
+                  return Expanded(
+                    child: ListView.builder(
+                        itemCount: usersnapshot.data?.docs.length,
+                        itemBuilder: (BuildContext context, index) {
+                          Map<String, dynamic> map =
+                              usersnapshot.data!.docs[index].data()
+                                  as Map<String, dynamic>;
+                          print(map['type'] == 'doubt');
+                          print("look above.................................");
+                          return map['type'] == 'doubt'
+                              ? ForumCard(
+                                  map: map,
+                                  teacherMap: widget.teacherMap,
+                                )
+                              : Container(
+                                  child: Text("hello"),
+                                  height: 0,
+                                );
+                        }),
+                  );
+                }
+              },
+            ),
+          ],
+        )
+        );
+  }
+}
+
+
+class ForumCard extends StatefulWidget {
+Map<String, dynamic> map;
+  Map<String, dynamic> teacherMap;
+  ForumCard({required this.map, required this.teacherMap});
+  @override
+  _ForumCardState createState() => _ForumCardState();
+}
+
+class _ForumCardState extends State<ForumCard> {
+  @override
+  Widget build(BuildContext context) {
+      double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final grey = const Color(0xFFe0e3e3).withOpacity(0.5);
     return Container(
@@ -151,7 +224,7 @@ class _DoubtsState extends State<Doubts> {
                   ),
                   //border: Border.all(width: 1)),
                   child: Center(
-                    child: Text('Reply',
+                    child: Text('Answers',
                         style: TextStyle(
                           fontFamily: "MontserratM",
                           fontSize: width * 0.037, //15

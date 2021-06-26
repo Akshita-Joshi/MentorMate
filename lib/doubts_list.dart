@@ -13,35 +13,33 @@ class DoubtPage extends StatefulWidget {
 class _DoubtPageState extends State<DoubtPage> {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('doubts').snapshots(),
-          builder: (ctx, AsyncSnapshot<QuerySnapshot> usersnapshot) {
-            if (usersnapshot.connectionState == ConnectionState.waiting) {
-              return Container(
-                  child: Center(child: CircularProgressIndicator()));
-            } else {
-              return Expanded(
-                child: ListView.builder(
-                    itemCount: usersnapshot.data?.docs.length,
-                    itemBuilder: (BuildContext context, index) {
-                      Map<String, dynamic> map = usersnapshot.data!.docs[index]
-                          .data() as Map<String, dynamic>;
-                      print('--------------this is map-------');
-                      print(map);
-                      return map['type'] == 'doubt' &&
-                              map['studentKey'].toString().substring(0, 2) ==
-                                  widget.checkYear &&
-                              map['to'] == widget.teacherMap['name']
-                          ? Doubts(
-                              map: map,
-                              teacherMap: widget.teacherMap,
-                            )
-                          : Container(height: 0);
-                    }),
-              );
-            }
-          }),
-    );
+    return StreamBuilder<QuerySnapshot>(
+    stream: FirebaseFirestore.instance.collection('doubts').snapshots(),
+    builder: (ctx, AsyncSnapshot<QuerySnapshot> usersnapshot) {
+      if (usersnapshot.connectionState == ConnectionState.waiting) {
+        return Container(
+            child: Center(child: CircularProgressIndicator()));
+      } else {
+        return Expanded(
+                        child: ListView.builder(
+              itemCount: usersnapshot.data?.docs.length,
+              itemBuilder: (BuildContext context, index) {
+                Map<String, dynamic> map = usersnapshot.data!.docs[index]
+                    .data() as Map<String, dynamic>;
+                print('--------------this is map-------');
+                print(map);
+                return map['type'] == 'doubt' &&
+                        map['studentKey'].toString().substring(0, 2) ==
+                            widget.checkYear &&
+                        map['to'] == widget.teacherMap['name']
+                    ? Doubts(
+                        map: map,
+                        teacherMap: widget.teacherMap,
+                      )
+                    : Container(height: 0);
+              }),
+        );
+      }
+    });
   }
 }
