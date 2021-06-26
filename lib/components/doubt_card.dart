@@ -6,7 +6,6 @@ import 'package:mentor_mate/chat_screen.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/teacher_chat_screen.dart';
 
-
 class Doubts extends StatefulWidget {
   Map<String, dynamic> map;
   Map<String, dynamic> teacherMap;
@@ -112,9 +111,11 @@ class _DoubtsState extends State<Doubts> {
                       fontSize: width * 0.035, //14
                       color: Colors.black.withOpacity(0.3))),
             ),
-                (widget.map['image_url'] != null)
-            ? Image.network(widget.map['image_url']!)
-            : Container(height: 0,),
+            (widget.map['image_url'] != null)
+                ? Image.network(widget.map['image_url']!)
+                : Container(
+                    height: 0,
+                  ),
             Padding(
               padding: EdgeInsets.only(
                   left: width * 0.05, top: height * 0.011), //20 10
@@ -127,13 +128,12 @@ class _DoubtsState extends State<Doubts> {
                     to = widget.map['name'];
                   });
 
-                  Navigator.of(context).push(CupertinoPageRoute(
+                  Navigator.of(context).push(MaterialPageRoute(
                       builder: (_) => TeacherChatScreen(
                             chatRoomId: roomId2,
                             userMap: widget.map,
                           )));
                 },
-               
                 child: Container(
                   height: height * 0.047, //40
                   width: width * 0.254, //100

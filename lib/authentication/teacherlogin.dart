@@ -314,7 +314,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
                         fontSize: 16.0);
                     Navigator.push(
                         context,
-                        CupertinoPageRoute(
+                        MaterialPageRoute(
                           builder: (context) => Login(),
                         ));
                   },

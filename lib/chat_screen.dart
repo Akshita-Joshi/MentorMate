@@ -217,32 +217,35 @@ class _MessageState extends State<Message> {
         alignment: widget.map['sendby'] == widget.check
             ? Alignment.topRight
             : Alignment.topLeft,
-        child: Container(
-          constraints: BoxConstraints(
-              maxWidth: width * 0.71, minWidth: width * 0.25), //280 100
-          decoration: BoxDecoration(
-              color: grey, borderRadius: BorderRadius.circular(10)),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: width * 0.04, vertical: height * 0.018), //16 16
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(/*widget.message!*/ widget.map['message'],
-                    style: TextStyle(
-                        fontFamily: "Montserrat",
-                        fontSize: width * 0.045, //18
-                        color: Colors.black)),
-                SizedBox(height: height * 0.009), //8
-                Text(widget.map['time'].toString(),
-                    style: TextStyle(
-                        fontFamily: "MontserratM",
-                        fontSize: width * 0.025, //10
-                        color: Colors.black.withOpacity(0.3)))
-              ],
-            ),
-          ),
-        ),
+        child: (widget.map['image_url'] != null)
+            ? Image.network(widget.map['image_url']!)
+            : Container(
+                constraints: BoxConstraints(
+                    maxWidth: width * 0.71, minWidth: width * 0.25), //280 100
+                decoration: BoxDecoration(
+                    color: grey, borderRadius: BorderRadius.circular(10)),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.04,
+                      vertical: height * 0.018), //16 16
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(/*widget.message!*/ widget.map['message'],
+                          style: TextStyle(
+                              fontFamily: "Montserrat",
+                              fontSize: width * 0.045, //18
+                              color: Colors.black)),
+                      SizedBox(height: height * 0.009), //8
+                      Text(widget.map['time'].toString(),
+                          style: TextStyle(
+                              fontFamily: "MontserratM",
+                              fontSize: width * 0.025, //10
+                              color: Colors.black.withOpacity(0.3)))
+                    ],
+                  ),
+                ),
+              ),
       ),
     );
   }
@@ -306,6 +309,11 @@ class _DoubtMessageState extends State<DoubtMessage> {
                     color: Colors.black.withOpacity(0.6)),
               ),
             ),
+            (widget.map['image_url'] != null)
+                ? Image.network(widget.map['image_url']!)
+                : Container(
+                    height: 0,
+                  ),
             Padding(
               padding: EdgeInsets.only(
                   left: width * 0.05, top: height * 0.009), //20 8

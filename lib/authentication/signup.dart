@@ -217,12 +217,12 @@ class _SignUpState extends State<SignUp> {
                           role == 'student'
                               ? Navigator.push(
                                   context,
-                                  CupertinoPageRoute(
+                                  MaterialPageRoute(
                                     builder: (context) => Register(),
                                   ))
                               : Navigator.push(
                                   context,
-                                  CupertinoPageRoute(
+                                  MaterialPageRoute(
                                     builder: (context) => TeacherLogin(),
                                   ));
 
@@ -246,7 +246,7 @@ class _SignUpState extends State<SignUp> {
                               textColor: Colors.black,
                               fontSize: 16.0);
                           Navigator.push(context,
-                              CupertinoPageRoute(builder: (_) => SignUp()));
+                              MaterialPageRoute(builder: (_) => SignUp()));
                           setState(() {
                             isLoading = false;
                           });
