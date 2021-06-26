@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mentor_mate/authentication/authenticate.dart';
+import 'package:mentor_mate/authentication/login.dart';
 import 'package:mentor_mate/chat/firebase.dart';
 import 'package:mentor_mate/chat_screen.dart';
 import 'package:mentor_mate/components/request.dart';
@@ -52,8 +54,19 @@ class _StudentHomeState extends State<StudentHome> {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _addSubs();
     });
-  }
+  }////
+// Future logOut(BuildContext context) async {
+  
+//   FirebaseAuth _auth = FirebaseAuth.instance;
 
+//   try {
+//     await _auth.signOut().then((value) {
+//       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()), );
+//     });
+//   } catch (e) {
+//     print("error");
+//   }
+// }///////
   void _addSubs() {
     List<Sub> sub = [
       Sub(name: "Applied Mathematics"),
@@ -134,6 +147,10 @@ class _StudentHomeState extends State<StudentHome> {
         brightness: Brightness.dark,
         elevation: 0,
         backgroundColor: Colors.white,
+        actions: [
+            IconButton(
+                icon: Icon(Icons.logout,color: Colors.black,), onPressed: () => logOut(context))
+          ],
       ),
       body: Stack(children: [
         Padding(

@@ -274,9 +274,9 @@ class _RegisterState extends State<Register> {
                         backgroundColor: grey,
                         textColor: Colors.black,
                         fontSize: 16.0);
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
-                        CupertinoPageRoute(
+                        MaterialPageRoute(
                           builder: (context) => Login(),
                         ));
                   },
