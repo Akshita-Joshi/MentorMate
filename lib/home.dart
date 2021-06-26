@@ -226,9 +226,10 @@ class _StudentHomeState extends State<StudentHome> {
 
                                 Navigator.of(context).push(CupertinoPageRoute(
                                     builder: (_) => ChatScreen(
-                                          chatRoomId: roomId1,
-                                          userMap: map,
-                                        )));
+                                        chatRoomId: roomId1,
+                                        userMap: map,
+                                        name1: currentName,
+                                        name2: map['name'])));
                               },
                               child: Container(
                                   child: Text(
@@ -348,9 +349,9 @@ class _TeacherHomeState extends State<TeacherHome>
               DoubtPage(checkYear: "BTech", teacherMap: widget.teacherMap),
             ],
           ),
-          /*Positioned(
+          Positioned(
               top: height! * 0.082, //70
-              child: RequestList())*/
+              child: RequestList(teacherMap: widget.teacherMap))
         ]),
       ),
     );

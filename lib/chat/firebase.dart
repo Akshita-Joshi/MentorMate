@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mentor_mate/globals.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final FirebaseAuth auth = FirebaseAuth.instance;
@@ -55,7 +60,14 @@ void onSendMessage() async {
     print('this is user data inside doubts----------------------------------');
     print(user['name']);
     if (message.text.isNotEmpty) {
-      type = 'message';
+      if (message.text == "https://meet.google.com/wax-ncmq-eim") {
+        print(message.text);
+
+        type = 'link';
+      } else {
+        type = 'message';
+        print(message.text);
+      }
     } else if (messageTitle.text.isNotEmpty) {
       type = 'doubt';
     }
@@ -71,7 +83,8 @@ void onSendMessage() async {
       "time": '${now.hour} : ${now.minute}',
       'name': user['name'].toString(),
       'studentKey':
-          '${user['year']} ${user['branch']} ${user['div']} ${user['roll']}'
+          '${user['year']} ${user['branch']} ${user['div']} ${user['roll']}',
+      'image_url': imageUrl
     };
     message.clear();
     messageTitle.clear();
@@ -96,4 +109,45 @@ void onSendMessage() async {
 
 void addDoubts(Map<String, dynamic> doubtmessage) async {
   await _firestore.collection('doubts').add(doubtmessage);
+}
+
+void uploadImage() async {
+  final _storage = FirebaseStorage.instance;
+  final _picker = ImagePicker();
+  PickedFile image;
+
+  //Check Permissions
+  await Permission.photos.request();
+
+  var permissionStatus = await Permission.photos.status;
+
+  if (permissionStatus.isGranted) {
+    //Select Image
+    image = (await _picker.getImage(source: ImageSource.gallery))!;
+    var file = File(image.path);
+
+    if (image != null) {
+      //Upload to Firebase
+      var snapshot = await _storage
+          .ref()
+          .child('folderName/imageName')
+          .putFile(file)
+          .whenComplete(() {});
+
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+
+      imageUrl = downloadUrl;
+      print(imageUrl);
+    } else {
+      print('No Path Received');
+    }
+  } else {
+    print('Grant Permissions and try again');
+  }
+}
+
+void addRequest(String to, String from) async {
+  Map<String, dynamic> request = {'to': to, 'from': from};
+  print('inside request-------------------------');
+  await _firestore.collection('request').add(request);
 }

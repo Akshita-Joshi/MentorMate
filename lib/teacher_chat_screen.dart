@@ -119,29 +119,33 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
                                 Map<String, dynamic> map =
                                     snapshot.data!.docs[index].data()
                                         as Map<String, dynamic>;
-                                return map['type'] == 'message'
-                                    ? Message(
-                                        check: 'teacher',
-                                        map: map,
-                                      )
-                                    : InkWell(
-                                        onTap: () {
-                                          Navigator.of(context).push(
-                                              HeroDialogRoute(
-                                                  builder: (context) {
-                                            return DoubtSolvedPopup(
-                                                doubtid: document.id,
-                                                id: widget.chatRoomId!,
-                                                map: map);
-                                          }));
-                                        },
-                                        child: Hero(
-                                            tag: 'doubt',
-                                            createRectTween: (begin, end) {
-                                              return CustomRectTween(
-                                                  begin: begin, end: end);
-                                            },
-                                            child: DoubtMessage(map: map)));
+                                if (map['type'] == 'link') {
+                                  return MeetCard();
+                                } else {
+                                  return map['type'] == 'message'
+                                      ? Message(
+                                          check: 'teacher',
+                                          map: map,
+                                        )
+                                      : InkWell(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                                HeroDialogRoute(
+                                                    builder: (context) {
+                                              return DoubtSolvedPopup(
+                                                  doubtid: document.id,
+                                                  id: widget.chatRoomId!,
+                                                  map: map);
+                                            }));
+                                          },
+                                          child: Hero(
+                                              tag: 'doubt',
+                                              createRectTween: (begin, end) {
+                                                return CustomRectTween(
+                                                    begin: begin, end: end);
+                                              },
+                                              child: DoubtMessage(map: map)));
+                                }
                               });
                         } else {
                           return Container();
