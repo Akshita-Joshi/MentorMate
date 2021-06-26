@@ -43,12 +43,25 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(20)),
                   child: Center(child: SvgPicture.asset('assets/back.svg')))),
-          title: Text(
-            "Teacher",
-            style: TextStyle(
-                fontFamily: "MontserratB",
-                fontSize: width * 0.0611, //24
-                color: Colors.black),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.userMap!['name'],
+                style: TextStyle(
+                    fontFamily: "MontserratB",
+                    fontSize: 16, //24
+                    color: Colors.black),
+              ),
+              SizedBox(height: 5),
+              Text(
+                widget.userMap!['studentKey'],
+                style: TextStyle(
+                    fontFamily: "MontserratM",
+                    fontSize: 12,
+                    color: Colors.black.withOpacity(0.4)),
+              ),
+            ],
           ),
           actions: [
             Padding(
@@ -100,7 +113,6 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
                           return ListView.builder(
                               physics: BouncingScrollPhysics(),
                               itemCount: snapshot.data!.docs.length,
-                              reverse: true,
                               itemBuilder: (BuildContext context, index) {
                                 DocumentSnapshot document =
                                     snapshot.data!.docs[index];

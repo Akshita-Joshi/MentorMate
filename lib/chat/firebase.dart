@@ -61,7 +61,7 @@ void onSendMessage() async {
     print(user['name']);
     if (message.text.isNotEmpty) {
       if (message.text == "https://meet.google.com/wax-ncmq-eim") {
-                print(message.text);
+        print(message.text);
 
         type = 'link';
       } else {
@@ -144,4 +144,10 @@ void uploadImage() async {
   } else {
     print('Grant Permissions and try again');
   }
+}
+
+void addRequest(String to, String from) async {
+  Map<String, dynamic> request = {'to': to, 'from': from};
+  print('inside request-------------------------');
+  await _firestore.collection('request').add(request);
 }

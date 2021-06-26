@@ -251,9 +251,9 @@ class _BottomDrawerState extends State<BottomDrawer> {
                                 ),
                               ),
 
-                                 (imageUrl != null)
-                                ? Image.network(imageUrl!)
-                                   : Placeholder(fallbackHeight: 200.0,fallbackWidth: double.infinity),
+                              (imageUrl != null)
+                                  ? Image.network(imageUrl!)
+                                  : Container(height: 0),
                             ],
                           ),
                         )

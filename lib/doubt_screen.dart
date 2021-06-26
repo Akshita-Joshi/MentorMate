@@ -54,13 +54,13 @@ class _DoubtScreenState extends State<DoubtScreen> {
                   return InkWell(
                     child: messages(size, map),
                     onTap: () {
-                      Navigator.push(
+                      /*Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (_) => ChatScreen(
                                     chatRoomId: widget.chatRoomId,
                                     userMap: widget.userMap,
-                                  )));
+                                  )));*/
                     },
                   );
                 },

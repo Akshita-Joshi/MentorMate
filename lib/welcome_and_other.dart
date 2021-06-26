@@ -141,41 +141,33 @@ class _StudentorTeacherState extends State<StudentorTeacher> {
             Padding(
               padding: const EdgeInsets.all(28.0),
               child: InkWell(
-                radius: 320,
-                splashColor: Colors.black.withOpacity(0.2),
-                onTap: () {},
-                child: Container(
-                  child: AnimatedTextKit(
-                      onTap: () {
-                        setState(() {
-                          role = 'student';
-                        });
-                        Authcheck.process == 'signup'
-                            ? Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => SignUp(),
-                                ))
-                            : Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => Login(),
-                                ));
-                      },
-                      totalRepeatCount: 2,
-                      isRepeatingAnimation: true,
-                      animatedTexts: [
-                        TyperAnimatedText(
-                          'Student',
-                          textStyle: TextStyle(
-                            fontFamily: "MontserratB",
-                            fontSize: 30,
-                            color: Colors.black,
-                          ),
-                        )
-                      ]),
-                ),
-              ),
+                  radius: 320,
+                  splashColor: Colors.black.withOpacity(0.2),
+                  onTap: () {
+                    setState(() {
+                      role = 'student';
+                    });
+                    Authcheck.process == 'signup'
+                        ? Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => SignUp(),
+                            ))
+                        : Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => Login(),
+                            ));
+                  },
+                  child: Container(
+                      child: Text(
+                    'Student',
+                    style: TextStyle(
+                      fontFamily: "MontserratB",
+                      fontSize: 30,
+                      color: Colors.black,
+                    ),
+                  ))),
             ),
             Container(
               height: 40,
@@ -187,38 +179,31 @@ class _StudentorTeacherState extends State<StudentorTeacher> {
               child: InkWell(
                 radius: 320,
                 splashColor: Colors.black.withOpacity(0.2),
-                onTap: () {},
+                onTap: () {
+                  setState(() {
+                    role = 'teacher';
+                  });
+                  Authcheck.process == 'signup'
+                      ? Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => SignUp(),
+                          ))
+                      : Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => Login(),
+                          ));
+                },
                 child: Container(
-                  child: AnimatedTextKit(
-                      onTap: () {
-                        setState(() {
-                          role = 'teacher';
-                        });
-                        Authcheck.process == 'signup'
-                            ? Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => SignUp(),
-                                ))
-                            : Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => Login(),
-                                ));
-                      },
-                      totalRepeatCount: 2,
-                      isRepeatingAnimation: true,
-                      animatedTexts: [
-                        TyperAnimatedText(
-                          'Teacher',
-                          textStyle: TextStyle(
-                            fontFamily: "MontserratB",
-                            fontSize: 30,
-                            color: Colors.black,
-                          ),
-                        )
-                      ]),
-                ),
+                    child: Text(
+                  'Teacher',
+                  style: TextStyle(
+                    fontFamily: "MontserratB",
+                    fontSize: 30,
+                    color: Colors.black,
+                  ),
+                )),
               ),
             ),
           ],

@@ -58,6 +58,9 @@ class HeroDialogRoute<T> extends PageRoute<T> {
 const String _heroAddTodo = 'add-todo-hero';
 
 class MeetRequestPopupCard extends StatefulWidget {
+  String from;
+  String to;
+  MeetRequestPopupCard({required this.from, required this.to});
   @override
   _MeetRequestPopupCardState createState() => _MeetRequestPopupCardState();
 }
@@ -118,7 +121,14 @@ class _MeetRequestPopupCardState extends State<MeetRequestPopupCard> {
                       ),
                     ),
                     FlatButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        print(widget.to);
+                        print('-------------------------');
+                        print(widget.from);
+                        print('-------------------------');
+                        addRequest(widget.to, widget.from);
+                        Navigator.pop(context);
+                      },
                       child: const Text(
                         'Request',
                         style:
@@ -320,8 +330,8 @@ class _MeetAcceptPopupCardState extends State<MeetAcceptPopupCard> {
                         print(message.text);
                         message.text = "https://meet.google.com/wax-ncmq-eim";
                         print(message.text);
-
                         onSendMessage();
+                        Navigator.pop(context);
                       },
                       child: const Text(
                         'Yes',
