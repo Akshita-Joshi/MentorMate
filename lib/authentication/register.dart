@@ -276,7 +276,7 @@ class _RegisterState extends State<Register> {
                         fontSize: 16.0);
                     Navigator.push(
                         context,
-                        CupertinoPageRoute(
+                        MaterialPageRoute(
                           builder: (context) => Login(),
                         ));
                   },

@@ -252,12 +252,12 @@ class _LoginState extends State<Login> {
                           role == 'student'
                               ? Navigator.push(
                                   context,
-                                  CupertinoPageRoute(
+                                  MaterialPageRoute(
                                       builder: (_) =>
                                           StudentHome(userMap: userMap)))
                               : Navigator.push(
                                   context,
-                                  CupertinoPageRoute(
+                                  MaterialPageRoute(
                                       builder: (_) => TeacherHome(
                                             teacherMap: teacherMap,
                                           )));
@@ -275,7 +275,7 @@ class _LoginState extends State<Login> {
                               textColor: Colors.black,
                               fontSize: 16.0);
                           Navigator.push(context,
-                              CupertinoPageRoute(builder: (_) => Login()));
+                              MaterialPageRoute(builder: (_) => Login()));
                           setState(() {
                             isLoading = false;
                           });

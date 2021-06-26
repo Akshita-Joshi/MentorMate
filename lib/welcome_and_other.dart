@@ -150,12 +150,12 @@ class _StudentorTeacherState extends State<StudentorTeacher> {
                     Authcheck.process == 'signup'
                         ? Navigator.push(
                             context,
-                            CupertinoPageRoute(
+                            MaterialPageRoute(
                               builder: (context) => SignUp(),
                             ))
                         : Navigator.push(
                             context,
-                            CupertinoPageRoute(
+                            MaterialPageRoute(
                               builder: (context) => Login(),
                             ));
                   },
@@ -186,12 +186,12 @@ class _StudentorTeacherState extends State<StudentorTeacher> {
                   Authcheck.process == 'signup'
                       ? Navigator.push(
                           context,
-                          CupertinoPageRoute(
+                          MaterialPageRoute(
                             builder: (context) => SignUp(),
                           ))
                       : Navigator.push(
                           context,
-                          CupertinoPageRoute(
+                          MaterialPageRoute(
                             builder: (context) => Login(),
                           ));
                 },

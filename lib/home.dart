@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mentor_mate/authentication/authenticate.dart';
 import 'package:mentor_mate/chat/firebase.dart';
 import 'package:mentor_mate/chat_screen.dart';
 import 'package:mentor_mate/components/request.dart';
@@ -100,7 +101,7 @@ class _StudentHomeState extends State<StudentHome> {
                 )));*/
         /*Navigator.push(
             context,
-            CupertinoPageRoute(
+            MaterialPageRoute(
               builder: (context) =>
                   ChatScreen(), //directs to chat screen on tap
             ));*/
@@ -134,6 +135,17 @@ class _StudentHomeState extends State<StudentHome> {
         brightness: Brightness.dark,
         elevation: 0,
         backgroundColor: Colors.white,
+        actions: [
+          InkWell(
+            onTap: () {
+              logOut(context);
+            },
+            child: Icon(
+              Icons.logout_rounded,
+              color: Colors.black,
+            ),
+          ),
+        ],
       ),
       body: Stack(children: [
         Padding(
@@ -224,18 +236,25 @@ class _StudentHomeState extends State<StudentHome> {
                                   to = map['name'];
                                 });
 
-                                Navigator.of(context).push(CupertinoPageRoute(
+                                Navigator.of(context).push(MaterialPageRoute(
                                     builder: (_) => ChatScreen(
                                         chatRoomId: roomId1,
                                         userMap: map,
                                         name1: currentName,
                                         name2: map['name'])));
                               },
-                              child: Container(
-                                  child: Text(
-                                map['${widget.userMap['year']}'].toString(),
-                                style: _textStyle(),
-                              )),
+                              child:
+                                  map['${widget.userMap['year']}'].toString() !=
+                                          'null'
+                                      ? Container(
+                                          child: Text(
+                                          map['${widget.userMap['year']}']
+                                              .toString(),
+                                          style: _textStyle(),
+                                        ))
+                                      : Container(
+                                          height: 0,
+                                        ),
                             );
                           },
                         ),
