@@ -230,20 +230,35 @@ class _DoubtSolvedPopupState extends State<DoubtSolvedPopup> {
                     ),
                     TextButton(
                       onPressed: () {
-                        setState(() {
+                        setState(() async {
                           widget.map['solved'] = true;
-                          var collRef = FirebaseFirestore.instance
+                          Map<String, dynamic> message = {
+                            'id': widget.map['id'],
+                            "sendby": widget.map['sendby'],
+                            'to': widget.map['to'],
+                            'type': widget.map['type'],
+                            'description': widget.map['description'],
+                            'solved': true,
+                            "message": widget.map['message'],
+                            'title': widget.map['title'],
+                            "time": widget.map['time'],
+                            'name': widget.map['name'],
+                            'studentKey': widget.map['studentKey'],
+                            'image_url': widget.map['image_url'],
+                            'servertimestamp': widget.map['servertimestamp'],
+                            'searchKeywords': widget.map['searchKeywords'],
+                          };
+                          Navigator.pop(context);
+                          await FirebaseFirestore.instance
                               .collection('chatroom')
                               .doc(widget.id)
                               .collection('chats')
                               .doc(widget.id)
-                              .collection('doubts');
-                          DocumentReference docReference = collRef.doc();
-                          print('--------$docReference');
-                          docReference.update({'solved': true});
-                          print('-----------${docReference.get()}');
+                              .collection('doubts').doc(widget.doubtid).set(message)
+                              ;
                         });
-                        Navigator.pop(context);
+                        
+                        
                       },
                       child: const Text(
                         'Yes',

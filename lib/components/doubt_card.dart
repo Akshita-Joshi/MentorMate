@@ -75,7 +75,10 @@ class _DoubtsState extends State<Doubts> {
                   height: height * 0.023, //20
                   width: width * 0.05, //20
                   child: Center(
-                    child: SvgPicture.asset(
+                    child: widget.map['solved']?SvgPicture.asset(
+                      'assets/tick.svg',
+                      height: 5,
+                    ): SvgPicture.asset(
                       'assets/round.svg',
                       height: 5,
                     ),

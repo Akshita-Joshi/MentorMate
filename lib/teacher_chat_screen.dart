@@ -150,7 +150,7 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
                           return Container();
                         }
                       })),
-              Container(width: width, child: TextInput()),
+              Container(width: width, child: TextInput2(id: widget.userMap!['id'],)),
             ],
           ),
         ],
