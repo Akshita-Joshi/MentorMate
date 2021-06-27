@@ -75,7 +75,10 @@ class _DoubtsState extends State<Doubts> {
                   height: height * 0.023, //20
                   width: width * 0.05, //20
                   child: Center(
-                    child: SvgPicture.asset(
+                    child: widget.map['solved']?SvgPicture.asset(
+                      'assets/tick.svg',
+                      height: 5,
+                    ): SvgPicture.asset(
                       'assets/round.svg',
                       height: 5,
                     ),
@@ -127,6 +130,9 @@ class _DoubtsState extends State<Doubts> {
                   print(roomId2);
                   setState(() {
                     roomId = roomId2;
+                    id = widget.map['id'];
+                        print('this is setState id');
+                        print(id);
                     to = widget.map['name'];
                     print(roomId2);
                     print(
@@ -134,13 +140,11 @@ class _DoubtsState extends State<Doubts> {
                   });
 
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) =>
-                      
-                       TeacherChatScreen(
+                      builder: (_) => TeacherChatScreen(
                             chatRoomId: roomId2,
                             userMap: widget.map,
-                          )
-                          ));
+                            //id:widget.map['id']
+                          )));
                 },
                 child: Container(
                   height: height * 0.047, //40

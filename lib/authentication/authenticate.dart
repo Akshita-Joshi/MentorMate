@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -63,12 +65,14 @@ Future<User?> logIn(String email, String password) async {
 }
 
 Future logOut(BuildContext context) async {
-  
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   try {
     await _auth.signOut().then((value) {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Login()), );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Login()),
+      );
     });
   } catch (e) {
     print("error");
@@ -86,6 +90,7 @@ void addUserData() async {
       yearController.text.isNotEmpty &&
       rollController.text.isNotEmpty) {
     print(message.text);
+    id = Random().nextInt(100000);
 
     Map<String, dynamic> userData = {
       'email': email.text,
@@ -95,6 +100,7 @@ void addUserData() async {
       'div': divController.text,
       "roll": rollController.text,
       'role': role,
+      'messageId': id
     };
 
     await _firestore

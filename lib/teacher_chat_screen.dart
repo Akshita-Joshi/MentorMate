@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:mentor_mate/chat/firebase.dart';
 import 'package:mentor_mate/chat_screen.dart';
 import 'package:mentor_mate/components/bottom_drawer.dart';
 import 'package:mentor_mate/components/popup.dart';
@@ -8,9 +13,10 @@ import 'package:mentor_mate/globals.dart';
 
 class TeacherChatScreen extends StatefulWidget {
   final Map<String, dynamic>? userMap;
+  //int id;
   String? chatRoomId;
 
-  TeacherChatScreen({this.chatRoomId, this.userMap});
+  TeacherChatScreen({this.chatRoomId, this.userMap, /*required this.id*/});
   @override
   _TeacherChatScreenState createState() => _TeacherChatScreenState();
 }
@@ -119,34 +125,24 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
                                 Map<String, dynamic> map =
                                     snapshot.data!.docs[index].data()
                                         as Map<String, dynamic>;
+
+                                /*if (map['id'] != null) {
+                                    setState(() {
+                                      id = map['id'];
+                                      print(
+                                          'inside setState-------------------------------');
+                                      print(id);
+                                    });
+                                  }*/
                                 if (map['type'] == 'link') {
-                                  print("This is link");
                                   return MeetCard();
                                 } else {
-                                  print("This is messageaa");
                                   return map['type'] == 'message'
                                       ? Message(
                                           check: 'teacher',
                                           map: map,
                                         )
-                                      : InkWell(
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                                HeroDialogRoute(
-                                                    builder: (context) {
-                                              return DoubtSolvedPopup(
-                                                  doubtid: document.id,
-                                                  id: widget.chatRoomId!,
-                                                  map: map);
-                                            }));
-                                          },
-                                          child: Hero(
-                                              tag: 'doubt',
-                                              createRectTween: (begin, end) {
-                                                return CustomRectTween(
-                                                    begin: begin, end: end);
-                                              },
-                                              child: DoubtMessage(map: map)));
+                                      : DoubtMessage(map: map);
                                 }
                               });
                         } else {
@@ -154,10 +150,103 @@ class _TeacherChatScreenState extends State<TeacherChatScreen> {
                           return Container();
                         }
                       })),
-              Container(width: width, child: TextInput()),
+              Container(width: width, child: TextInput2(id: widget.userMap!['id'],)),
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class TextInput2 extends StatefulWidget {
+  int id;
+  TextInput2({required this.id});
+  @override
+  _TextInput2State createState() => _TextInput2State();
+}
+
+class _TextInput2State extends State<TextInput2> {
+  File? _image;
+  final _picker = ImagePicker();
+
+  @override
+  Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    final grey = const Color(0xFFe0e3e3).withOpacity(0.5);
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: width * 0.045, vertical: height * 0.021), //18 18
+      child: Container(
+        height: height * 0.058, //50
+        width: width,
+        decoration:
+            BoxDecoration(color: grey, borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: width * 0.03, vertical: height * 0.014), //12 12
+          child: Row(
+            //crossAxisAlignment: CrossAxisAlignment.baseline,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InkWell(
+                onTap: () {
+                  uploadImage();
+                },
+                child: Container(
+                  height: height * 0.028, //24
+                  child: SvgPicture.asset('assets/paperclip.svg'),
+                ),
+              ),
+              SizedBox(
+                width: width * 0.025, //10
+              ),
+              Flexible(
+                /*height: 50,
+                width: 200,*/
+                child: TextFormField(
+                  controller: message,
+                  style: TextStyle(
+                      fontFamily: "Montserrat",
+                      fontSize: width * 0.045, //18
+                      color: Colors.black),
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      hintStyle: TextStyle(
+                          fontFamily: "Montserrat",
+                          fontSize: width * 0.045, //18
+                          color: Colors.black.withOpacity(0.3)),
+                      hintText: "Type Something ....."),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    type = 'message';
+                    id = widget.id;
+                  });
+                  onSendMessage();
+                },
+                child: Container(
+                  height: height * 0.058, //50
+                  width: width * 0.101, //40
+                  child: Text(
+                    'Send',
+                    style: TextStyle(
+                        fontFamily: "MontserratM",
+                        fontSize: width * 0.035, //14
+                        color: Colors.black),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

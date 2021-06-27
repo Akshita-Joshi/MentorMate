@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -62,17 +63,29 @@ void onSendMessage() async {
     if (message.text.isNotEmpty) {
       if (message.text == "https://meet.google.com/wax-ncmq-eim") {
         print(message.text);
-
+        if(user['role']=='student'){
+          id = user['messageId'];
+        }
+        
         type = 'link';
       } else {
+        if(user['role']=='student'){
+          id = user['messageId'];
+        }
         type = 'message';
         print(message.text);
       }
     } else if (messageTitle.text.isNotEmpty) {
+      id = Random().nextInt(100000);
+      _firestore
+          .collection("users")
+          .doc(auth.currentUser!.uid)
+          .update({'messageId': id});
       type = 'doubt';
     }
     for (int i = 0; i < messageTitle.toString().length; i++) {}
     Map<String, dynamic> messages = {
+      'id': id,
       "sendby": user['role'].toString(),
       'to': to,
       'type': type,
@@ -85,6 +98,7 @@ void onSendMessage() async {
       'studentKey':
           '${user['year']} ${user['branch']} ${user['div']} ${user['roll']}',
       'image_url': imageUrl,
+      'servertimestamp':FieldValue.serverTimestamp(),
       'searchKeywords': '{$messageTitle[0]}'
     };
     message.clear();
