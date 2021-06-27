@@ -1,11 +1,23 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mentor_mate/splashscreen.dart';
+
 //import 'package:splashscreen/splashscreen.dart';
+Future<void> _messageHandler(RemoteMessage message) async {
+  print('background message ${message.notification!.body}');
+}
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+    FirebaseMessaging.instance.getToken();
+
+  FirebaseMessaging.onBackgroundMessage(_messageHandler);
+
+  FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    print('Message clicked!');
+  });
   runApp(MyApp());
 }
 
@@ -15,7 +27,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-    
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(

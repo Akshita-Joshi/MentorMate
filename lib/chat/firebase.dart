@@ -83,7 +83,7 @@ void onSendMessage() async {
           .update({'messageId': id});
       type = 'doubt';
     }
-
+    for (int i = 0; i < messageTitle.toString().length; i++) {}
     Map<String, dynamic> messages = {
       'id': id,
       "sendby": user['role'].toString(),
@@ -98,7 +98,8 @@ void onSendMessage() async {
       'studentKey':
           '${user['year']} ${user['branch']} ${user['div']} ${user['roll']}',
       'image_url': imageUrl,
-      'servertimestamp':FieldValue.serverTimestamp()
+      'servertimestamp':FieldValue.serverTimestamp(),
+      'searchKeywords': '{$messageTitle[0]}'
     };
     message.clear();
     messageTitle.clear();
