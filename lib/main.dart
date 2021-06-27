@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mentor_mate/splashscreen.dart';
 
 //import 'package:splashscreen/splashscreen.dart';
@@ -11,7 +12,7 @@ Future<void> _messageHandler(RemoteMessage message) async {
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-    FirebaseMessaging.instance.getToken();
+  FirebaseMessaging.instance.getToken();
 
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
 
@@ -21,11 +22,31 @@ Future main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  // FlutterLocalNotificationsPlugin? flutterLocalNotifications;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   var androidInitilize = new AndroidInitializationSettings('ic_launcher111');
+  //   var iOSinitilize = new IOSInitializationSettings();
+  //   var initilizationSettings = new InitializationSettings(android:androidInitilize,iOS:iOSinitilize);
+  //   flutterLocalNotifications = new FlutterLocalNotificationsPlugin();
+  //   flutterLocalNotifications!.initialize(initilizationSettings,
+  //   onSelectNotification: notificationSelected );
+  // }
 
   @override
   Widget build(BuildContext context) {
+    // Future notificationSelected(String payload)async{
+
+    // }
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
@@ -56,4 +77,7 @@ class MyApp extends StatelessWidget {
         )*/
         );
   }
+  // Future notificationSelected(String? payload)async{
+
+  //   }
 }

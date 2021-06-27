@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/chat/firebase.dart';
 import 'package:mentor_mate/globals.dart';
@@ -11,6 +12,20 @@ class BottomDrawer extends StatefulWidget {
 }
 
 class _BottomDrawerState extends State<BottomDrawer> {
+  FlutterLocalNotificationsPlugin? flutterLocalNotifications;
+
+  @override
+  void initState() {
+    super.initState();
+    var androidInitilize = new AndroidInitializationSettings('ic_launcher111');
+    var iOSinitilize = new IOSInitializationSettings();
+    var initilizationSettings = new InitializationSettings(
+        android: androidInitilize, iOS: iOSinitilize);
+    flutterLocalNotifications = new FlutterLocalNotificationsPlugin();
+    flutterLocalNotifications!.initialize(initilizationSettings,
+        onSelectNotification: notificationSelected);
+  }
+
   double doubtOpacity = 0;
   double doubtdesOpacity = 0;
   static AnimatedOpacity _label(double value, String text) {
@@ -56,6 +71,23 @@ class _BottomDrawerState extends State<BottomDrawer> {
   void _callOnTop() {
     _scrollController.animateTo(_scrollController.position.minScrollExtent,
         duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
+  }
+
+  Future _showNotification() async {
+    var androidDetails = new AndroidNotificationDetails(
+      'Channel Id',
+      'Mentor mate',
+      'descriptions',
+      importance: Importance.max,
+    );
+    var iOSdetails = new IOSNotificationDetails();
+    var genralNotificationDetails =
+        new NotificationDetails(android: androidDetails, iOS: iOSdetails);
+    // await flutterLocalNotifications!
+    //     .show(0, 'task', 'body', genralNotificationDetails);
+    var scheduledTime = DateTime.now().add(Duration(seconds: 50));
+    flutterLocalNotifications!.schedule(1, "You have not answerd this question ${messageTitle.text}", "asked 60 seconds ago",
+        scheduledTime, genralNotificationDetails);
   }
 
   @override
@@ -232,6 +264,7 @@ class _BottomDrawerState extends State<BottomDrawer> {
                                       'inside ask---------------------------');
                                   Drawerclass.showMenu = false;
                                   widget.showMenu = false;
+                                  _showNotification();
                                   onSendMessage();
                                 },
                                 child: Container(
@@ -259,6 +292,15 @@ class _BottomDrawerState extends State<BottomDrawer> {
                         )
                       ])))
         ],
+      ),
+    );
+  }
+
+  Future notificationSelected(String? payload) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text("Notification : $payload"),
       ),
     );
   }
