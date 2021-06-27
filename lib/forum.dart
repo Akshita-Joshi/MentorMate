@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/chat/firebase.dart';
+import 'package:mentor_mate/chat_screen.dart';
 import 'package:mentor_mate/components/doubt_card.dart';
+import 'package:mentor_mate/components/popup.dart';
 import 'package:mentor_mate/globals.dart';
 import 'package:mentor_mate/teacher_chat_screen.dart';
 
@@ -20,17 +22,19 @@ class _FormDartState extends State<FormDart> {
   Widget build(BuildContext context) {
     print("This is form data");
     return Scaffold(
-      
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Forum',style: TextStyle(color:Colors.black),),
+          title: Text(
+            'Forum',
+            style: TextStyle(color: Colors.black),
+          ),
           elevation: 0,
           backgroundColor: Colors.white,
           leading: InkWell(
               customBorder: new CircleBorder(),
               splashColor: Colors.black.withOpacity(0.2),
               onTap: () {
-                 print("This is form data");
+                print("This is form data");
                 Navigator.pop(context);
               },
               child: Container(
@@ -39,11 +43,11 @@ class _FormDartState extends State<FormDart> {
                       BoxDecoration(borderRadius: BorderRadius.circular(20)),
                   child: Center(child: SvgPicture.asset('assets/back.svg')))),
         ),
-        
         body: Column(
           children: [
             StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('doubts').snapshots(),
+              stream:
+                  FirebaseFirestore.instance.collection('doubts').orderBy('servertimestamp', descending: false).snapshots(),
               builder: (ctx, AsyncSnapshot<QuerySnapshot> usersnapshot) {
                 if (usersnapshot.connectionState == ConnectionState.waiting) {
                   return Container(
@@ -73,14 +77,12 @@ class _FormDartState extends State<FormDart> {
               },
             ),
           ],
-        )
-        );
+        ));
   }
 }
 
-
 class ForumCard extends StatefulWidget {
-Map<String, dynamic> map;
+  Map<String, dynamic> map;
   Map<String, dynamic> teacherMap;
   ForumCard({required this.map, required this.teacherMap});
   @override
@@ -90,7 +92,7 @@ Map<String, dynamic> map;
 class _ForumCardState extends State<ForumCard> {
   @override
   Widget build(BuildContext context) {
-      double height = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final grey = const Color(0xFFe0e3e3).withOpacity(0.5);
     return Container(
@@ -195,7 +197,7 @@ class _ForumCardState extends State<ForumCard> {
               child: InkWell(
                 onTap: () {
                   String roomId2 =
-                      chatRoomId(widget.teacherMap['name'], widget.map['name']);
+                      chatRoomId(widget.map['to'], widget.map['name']);
                   print("this is chatroomid");
                   print(roomId2);
                   setState(() {
@@ -207,13 +209,10 @@ class _ForumCardState extends State<ForumCard> {
                   });
 
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) =>
-                      
-                       TeacherChatScreen(
+                      builder: (_) => ForumChatScreen(
                             chatRoomId: roomId2,
                             userMap: widget.map,
-                          )
-                          ));
+                          )));
                 },
                 child: Container(
                   height: height * 0.047, //40
@@ -236,6 +235,137 @@ class _ForumCardState extends State<ForumCard> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ForumChatScreen extends StatefulWidget {
+  final Map<String, dynamic>? userMap;
+  String? chatRoomId;
+
+  ForumChatScreen({this.chatRoomId, this.userMap});
+  @override
+  _ForumChatScreenState createState() => _ForumChatScreenState();
+}
+
+class _ForumChatScreenState extends State<ForumChatScreen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  @override
+  Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    const String _heroAddTodo = 'add-todo-hero';
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(height * 0.082), //70
+        child: AppBar(
+          leadingWidth: height * 0.082, //70
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: InkWell(
+              customBorder: new CircleBorder(),
+              splashColor: Colors.black.withOpacity(0.2),
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                  height: height * 0.035, //30
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                  child: Center(child: SvgPicture.asset('assets/back.svg')))),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.userMap!['name'],
+                style: TextStyle(
+                    fontFamily: "MontserratB",
+                    fontSize: 16, //24
+                    color: Colors.black),
+              ),
+              SizedBox(height: 5),
+              Text(
+                widget.userMap!['studentKey'],
+                style: TextStyle(
+                    fontFamily: "MontserratM",
+                    fontSize: 12,
+                    color: Colors.black.withOpacity(0.4)),
+              ),
+            ],
+          ),
+          
+        ),
+      ),
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              Expanded(
+                  child: StreamBuilder<QuerySnapshot>(
+                      stream: _firestore
+                          .collection('chatroom')
+                          .doc(widget.chatRoomId)
+                          .collection('chats')
+                          .doc(widget.chatRoomId)
+                          .collection('doubts')
+                          .orderBy('time', descending: false)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.data != null) {
+                          return ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (BuildContext context, index) {
+                                DocumentSnapshot document =
+                                    snapshot.data!.docs[index];
+                                Map<String, dynamic> map =
+                                    snapshot.data!.docs[index].data()
+                                        as Map<String, dynamic>;
+                               
+                                if (map['id'] == widget.userMap!['id']) {
+                                  print("This is messageaa");
+                                  return map['type'] == 'message'
+                                      ? Message(
+                                          check: 'teacher',
+                                          map: map,
+                                        )
+                                      : InkWell(
+                                          onTap: () {
+                                            Navigator.of(context).push(
+                                                HeroDialogRoute(
+                                                    builder: (context) {
+                                              return DoubtSolvedPopup(
+                                                  doubtid: document.id,
+                                                  id: widget.chatRoomId!,
+                                                  map: map);
+                                            }));
+                                          },
+                                          child: Hero(
+                                              tag: 'doubt',
+                                              createRectTween: (begin, end) {
+                                                return CustomRectTween(
+                                                    begin: begin, end: end);
+                                              },
+                                              child: DoubtMessage(map: map)));
+                                } else {
+                                  print('other part');
+                                  return Container();
+                                }
+                              });
+                        } else {
+                          print("Tjhis is empty container");
+                          return Container();
+                        }
+                      })),
+              Container(width: width, child: TextInput()),
+            ],
+          ),
+        ],
       ),
     );
   }
