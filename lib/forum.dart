@@ -4,7 +4,22 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mentor_mate/chat/firebase.dart';
 import 'package:mentor_mate/components/doubt_card.dart';
 import 'package:mentor_mate/globals.dart';
+import 'package:mentor_mate/search.dart';
 import 'package:mentor_mate/teacher_chat_screen.dart';
+
+enum SinginCharacter { lowToHigh, highToLow, alphabetically }
+
+// getUSersTrip() async {
+//   var datas = await FirebaseFirestore.instance
+//       .collection('chatroom')
+//       .doc(widget.chatRoomId)
+//       .collection('chats')
+//       .doc(chatRoomId)
+//       .collection('doubts')
+//       .orderBy('time', descending: false)
+//       .get();
+//       return data.documents
+// }
 
 class FormDart extends StatefulWidget {
   Map<String, dynamic> teacherMap;
@@ -16,21 +31,44 @@ class FormDart extends StatefulWidget {
 }
 
 class _FormDartState extends State<FormDart> {
+  TextEditingController _searchController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(_onSearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  _onSearchChanged() {
+    print(_searchController.text);
+  }
+
+  String query = "";
+  SinginCharacter _character = SinginCharacter.alphabetically;
+  var data;
   @override
   Widget build(BuildContext context) {
     print("This is form data");
     return Scaffold(
-      
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Forum',style: TextStyle(color:Colors.black),),
+          title: Text(
+            'Forum',
+            style: TextStyle(color: Colors.black),
+          ),
           elevation: 0,
           backgroundColor: Colors.white,
           leading: InkWell(
               customBorder: new CircleBorder(),
               splashColor: Colors.black.withOpacity(0.2),
               onTap: () {
-                 print("This is form data");
+                print("This is form data");
                 Navigator.pop(context);
               },
               child: Container(
@@ -39,13 +77,27 @@ class _FormDartState extends State<FormDart> {
                       BoxDecoration(borderRadius: BorderRadius.circular(20)),
                   child: Center(child: SvgPicture.asset('assets/back.svg')))),
         ),
-        
         body: Column(
           children: [
+            InkWell(
+                child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.search,
+                      ),
+                    )),
+                onTap: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => Search(search: _searchController.text,teacherMap: widget.teacherMap,)));
+                }),
             StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('doubts').snapshots(),
+              stream:
+                  FirebaseFirestore.instance.collection('doubts').snapshots(),
               builder: (ctx, AsyncSnapshot<QuerySnapshot> usersnapshot) {
                 if (usersnapshot.connectionState == ConnectionState.waiting) {
+                  // print("aSADSA...............................");
+                  // print( usersnapshot.data!.docs[].data());
                   return Container(
                       child: Center(child: CircularProgressIndicator()));
                 } else {
@@ -53,6 +105,9 @@ class _FormDartState extends State<FormDart> {
                     child: ListView.builder(
                         itemCount: usersnapshot.data?.docs.length,
                         itemBuilder: (BuildContext context, index) {
+                          print("aSADSA...............................");
+                          data = usersnapshot.data!.docs[index].data();
+                          // print(usersnapshot.data!.docs[index].data());
                           Map<String, dynamic> map =
                               usersnapshot.data!.docs[index].data()
                                   as Map<String, dynamic>;
@@ -73,14 +128,12 @@ class _FormDartState extends State<FormDart> {
               },
             ),
           ],
-        )
-        );
+        ));
   }
 }
 
-
 class ForumCard extends StatefulWidget {
-Map<String, dynamic> map;
+  Map<String, dynamic> map;
   Map<String, dynamic> teacherMap;
   ForumCard({required this.map, required this.teacherMap});
   @override
@@ -90,10 +143,11 @@ Map<String, dynamic> map;
 class _ForumCardState extends State<ForumCard> {
   @override
   Widget build(BuildContext context) {
-      double height = MediaQuery.of(context).size.height;
+    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     final grey = const Color(0xFFe0e3e3).withOpacity(0.5);
-    return Container(
+    return 
+    Container(
       width: width,
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -207,13 +261,10 @@ class _ForumCardState extends State<ForumCard> {
                   });
 
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) =>
-                      
-                       TeacherChatScreen(
+                      builder: (_) => TeacherChatScreen(
                             chatRoomId: roomId2,
                             userMap: widget.map,
-                          )
-                          ));
+                          )));
                 },
                 child: Container(
                   height: height * 0.047, //40

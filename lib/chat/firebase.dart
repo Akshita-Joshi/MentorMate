@@ -71,7 +71,7 @@ void onSendMessage() async {
     } else if (messageTitle.text.isNotEmpty) {
       type = 'doubt';
     }
-
+    for (int i = 0; i < messageTitle.toString().length; i++) {}
     Map<String, dynamic> messages = {
       "sendby": user['role'].toString(),
       'to': to,
@@ -84,7 +84,8 @@ void onSendMessage() async {
       'name': user['name'].toString(),
       'studentKey':
           '${user['year']} ${user['branch']} ${user['div']} ${user['roll']}',
-      'image_url': imageUrl
+      'image_url': imageUrl,
+      'searchKeywords': '{$messageTitle[0]}'
     };
     message.clear();
     messageTitle.clear();
