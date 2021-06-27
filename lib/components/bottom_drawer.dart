@@ -86,8 +86,12 @@ class _BottomDrawerState extends State<BottomDrawer> {
     // await flutterLocalNotifications!
     //     .show(0, 'task', 'body', genralNotificationDetails);
     var scheduledTime = DateTime.now().add(Duration(seconds: 50));
-    flutterLocalNotifications!.schedule(1, "You have not answerd this question ${messageTitle.text}", "asked 60 seconds ago",
-        scheduledTime, genralNotificationDetails);
+    flutterLocalNotifications!.schedule(
+        1,
+        "Unanswered question since 2 days: ${messageTitle.text}",
+        "${messageDescription.text}",
+        scheduledTime,
+        genralNotificationDetails);
   }
 
   @override

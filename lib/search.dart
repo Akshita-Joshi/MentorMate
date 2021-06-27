@@ -94,6 +94,7 @@ class _SearchState extends State<Search> {
                               //     ),
                               //   )
                               : Container(
+                                child: Text("Visible?"),
                                   height: 0,
                                 );
                         },
